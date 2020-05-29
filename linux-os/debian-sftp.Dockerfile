@@ -2,6 +2,9 @@
 FROM debian:stretch
 MAINTAINER Softlang [softlang.net]
 
+ARG my_usr=softlang
+ARG my_pwd=softlang
+
 RUN apt-get update
 
 RUN apt-get -y install openssh-server && \
@@ -10,6 +13,8 @@ RUN apt-get -y install openssh-server && \
 RUN mkdir -p /var/run/sshd && \
     rm -f /etc/ssh/ssh_host_*key*
 
+RUN useradd -ms /bin/bash ${my_usr}
+RUN echo "${my_usr}:${my_pwd}" | chpasswd
 
 EXPOSE 22
 
