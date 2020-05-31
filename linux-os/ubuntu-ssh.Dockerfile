@@ -16,7 +16,7 @@ RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 # RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 
-RUN echo 'root:{my_pwd}' | chpasswd
+RUN echo 'root:${my_pwd}' | chpasswd
 
 EXPOSE 22
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]
