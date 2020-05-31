@@ -12,8 +12,9 @@ RUN mkdir -p /var/run/sshd && \
 
 RUN dpkg-reconfigure openssh-server
 
-# RUN echo 'PermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
-RUN sed -i 's/#PermitRootLogin/PermitRootLogin/' /etc/ssh/sshd_config
+RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+# RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 
 RUN echo 'root:{my_pwd}' | chpasswd
 
