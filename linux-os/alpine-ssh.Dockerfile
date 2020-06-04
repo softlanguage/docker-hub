@@ -6,7 +6,7 @@ ENV P_USER=yong
 
 EXPOSE 80 22
 
-COPY ./shell/alpine-ssh-entrypoint.sh /
+COPY /linux-os/shell/alpine-ssh-entrypoint.sh /
 RUN /entrypoint.sh
 
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]
