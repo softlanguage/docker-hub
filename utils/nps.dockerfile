@@ -15,10 +15,7 @@ EXPOSE 8024
 CMD ["nps", "start"]
 
 
-
-
 FROM alpine:3.8
-MAINTAINER hanxi <hanxi.info@gmail.com>
 
 ENV NPS_VERSION 0.23.3
 
