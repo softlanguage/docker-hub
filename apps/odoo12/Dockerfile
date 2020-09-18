@@ -55,6 +55,10 @@ ENV OD_HOME /opt/odoo/home
 RUN mkdir -p /opt/odoo/app \
     && mkdir -p /opt/odoo/data
 
+# requriements
+COPY ./requirements.txt ${OD_HOME}
+RUN pip3 install -r ${OD_HOME}/requirements.txt
+
 #RUN useradd -m -d $OD_HOME -s /bin/bash odoo
 RUN useradd -rm -d $OD_HOME -s /bin/bash -g root -u 8069 odoo
 
