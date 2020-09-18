@@ -49,15 +49,17 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && apt-get install --no-install-recommends -y nodejs \
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
- 
+
+ENV OD_HOME /opt/odoo/home
 RUN mkdir -p /opt/odoo/app \
     && mkdir -p /opt/odoo/data
 
-#RUN useradd -m -d /opt/odoo/home -s /bin/bash odoo
-RUN useradd -rm -d /opt/odoo/home -s /bin/bash -g root -u 8069 odoo
+#RUN useradd -m -d $OD_HOME -s /bin/bash odoo
+RUN useradd -rm -d $OD_HOME -s /bin/bash -g root -u 8069 odoo
 
 # chang own
-RUN chown -R odoo /opt/odoo
+RUN mkdir -p ${OD_HOME}/odenv \
+    && chown -R odoo /opt/odoo
 
 VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
 
@@ -68,6 +70,11 @@ EXPOSE 8069 8071 8072
 
 # Set default user when running the container
 USER odoo
+
+ENV VIRTUAL_ENV ${OD_HOME}/odenv
+
+# env
+RUN python3 -m venv ${OD_HOME}/odenv
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
 CMD ["bash", "/opt/odoo/home/start-odoo.sh"]
