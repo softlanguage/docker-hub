@@ -50,15 +50,15 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m -s /bin/bash odoo
+RUN useradd -m -s /bin/bash -u 1000 -g 1000 odoo
  
 RUN mkdir -p /opt/odoo/app \
     && mkdir -p /opt/odoo/data \
     && chown -R odoo:odoo /opt/odoo
 
-WORKDIR /opt/odoo/app
+VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
 
-VOLUME ["/opt/odoo/app", "/opt/odoo/data"]
+WORKDIR /home/odoo
 
 # Expose Odoo services
 EXPOSE 8069 8071 8072
@@ -66,4 +66,5 @@ EXPOSE 8069 8071 8072
 # Set default user when running the container
 USER odoo
 
-CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
+# CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
+CMD ["bash", "~/odoo.sh"]
