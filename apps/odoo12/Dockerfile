@@ -50,7 +50,7 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
 
-# RUN useradd -m -s /bin/bash odoo
+RUN useradd -m -s /bin/bash odoo
  
 RUN mkdir -p /opt/odoo/app \
     && mkdir -p /opt/odoo/data \
