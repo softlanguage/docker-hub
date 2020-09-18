@@ -75,6 +75,7 @@ ENV VIRTUAL_ENV ${OD_HOME}/odenv
 
 # env
 RUN python3 -m venv ${OD_HOME}/odenv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
 CMD ["bash", "/opt/odoo/home/start-odoo.sh"]
