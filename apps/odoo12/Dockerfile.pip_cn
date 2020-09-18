@@ -65,10 +65,9 @@ EXPOSE 8069 8071 8072
 
 # Set default user when running the container
 USER odoo
-ENV PIP_CFG "~/.pip/pip.conf"
 
 RUN mkdir ~/.pip \
-    && echo "[global]" >> ${PIP_CFG}  \
-    && echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> ${PIP_CFG}
+    && echo "[global]" > ~/.pip/pip.conf  \
+    && echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> ~/.pip/pip.conf
 
 CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
