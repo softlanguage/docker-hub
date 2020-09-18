@@ -59,7 +59,7 @@ RUN mkdir -p /opt/odoo/app \
 RUN useradd -rm -d $OD_HOME -s /bin/bash -g root -u 8069 odoo
 
 # chang own
-RUN mkdir -p ${OD_HOME}/odenv \
+RUN mkdir -p ${OD_HOME}/venv \
     && chown -R odoo /opt/odoo
 
 VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
@@ -71,11 +71,9 @@ EXPOSE 8069 8071 8072
 
 # Set default user when running the container
 USER odoo
-
-ENV VIRTUAL_ENV ${OD_HOME}/odenv
-
-# env
-RUN python3 -m venv ${OD_HOME}/odenv
+ENV VIRTUAL_ENV ${HOME}/venv
+# virtual env
+RUN python3 -m venv ${HOME}/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
