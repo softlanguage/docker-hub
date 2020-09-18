@@ -51,15 +51,15 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && rm -rf /var/lib/apt/lists/*
 
 #RUN useradd -m -d /opt/odoo/home -s /bin/bash odoo
-RUN useradd -rm -d /opt/odoo/home -s /bin/bash -g root -G sudo -u 8069 ubuntu
+RUN useradd -rm -d /opt/odoo/home -s /bin/bash -g root -u 8069 ubuntu
  
 RUN mkdir -p /opt/odoo/app \
     && mkdir -p /opt/odoo/data \
-    && chown -R odoo:odoo /opt/odoo
+    && chown -R odoo /opt/odoo
 
 VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
 
-WORKDIR /home/odoo
+WORKDIR /opt/odoo/home
 
 # Expose Odoo services
 EXPOSE 8069 8071 8072
@@ -68,4 +68,4 @@ EXPOSE 8069 8071 8072
 USER odoo
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
-CMD ["bash", "~/odoo.sh"]
+CMD ["bash", "/opt/odoo/home/start-odoo.sh"]
