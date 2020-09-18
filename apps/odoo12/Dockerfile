@@ -49,13 +49,15 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && apt-get install --no-install-recommends -y nodejs \
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
-
-#RUN useradd -m -d /opt/odoo/home -s /bin/bash odoo
-RUN useradd -rm -d /opt/odoo/home -s /bin/bash -g root -u 8069 ubuntu
  
 RUN mkdir -p /opt/odoo/app \
-    && mkdir -p /opt/odoo/data \
-    && chown -R odoo /opt/odoo
+    && mkdir -p /opt/odoo/data
+
+#RUN useradd -m -d /opt/odoo/home -s /bin/bash odoo
+RUN useradd -rm -d /opt/odoo/home -s /bin/bash -g root -u 8069 odoo
+
+# chang own
+RUN chown -R odoo /opt/odoo
 
 VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
 
