@@ -67,7 +67,7 @@ RUN useradd -rm -d $OD_HOME -s /bin/bash -g root -u 8069 odoo
 RUN mkdir -p ${OD_HOME}/venv \
     && chown -R odoo ${OD_ROOT}
 
-VOLUME ["${OD_ROOT}/app", "${OD_ROOT}/data", "${OD_ROOT}/home"]
+VOLUME ["${OD_ROOT}/app", "${OD_ROOT}/data", "${OD_HOME}"]
 
 WORKDIR ${OD_ROOT}/home
 
@@ -83,4 +83,4 @@ USER odoo
 #ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
-CMD ["bash", "/opt/odoo/home/start-odoo.sh"]
+CMD ["bash", "${OD_HOME}/start-odoo.sh"]
