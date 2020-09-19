@@ -19,6 +19,8 @@ RUN apt-get update \
             libssl1.0-dev \
             libblas-dev \
             libatlas-base-dev \
+            libldap2-dev \
+            libsasl2-dev \
             node-less \
             python3-num2words \
             python3-pip \
