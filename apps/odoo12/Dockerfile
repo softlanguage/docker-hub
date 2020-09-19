@@ -17,7 +17,7 @@ RUN apt-get update \
             fonts-noto-cjk \
             gnupg \
             libssl1.0-dev \
-            #libblas-dev \
+            libblas-dev \
             #libatlas-base-dev \
             libldap2-dev \
             libsasl2-dev \
