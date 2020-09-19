@@ -21,7 +21,7 @@ RUN apt-get update \
             python3-num2words \
             python3-pip \
             #python3-venv \
-            python3-dev
+            python3-dev \
             python3-phonenumbers \
             python3-pyldap \
             python3-qrcode \
