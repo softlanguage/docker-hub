@@ -51,27 +51,25 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
 
-ENV OD_HOME /opt/odoo/home
-RUN mkdir -p /opt/odoo/app \
-    && mkdir -p /opt/odoo/data
+ENV OD_ROOT /opt/odoo
+ENV OD_HOME ${OD_ROOT}/home
+RUN mkdir -p ${OD_ROOT}/app \
+    && mkdir -p ${OD_ROOT}/data
 
 # requriements
-ADD requirements.txt ${OD_HOME}
-RUN ls -la ${OD_HOME} \
-    && cat ${OD_HOME}/requirements.txt
-    
-RUN pip3 install -r ${OD_HOME}/requirements.txt
+ADD ./requirements.txt ${OD_ROOT}
+RUN pip3 install -r ${OD_ROOT}/requirements.txt
 
 #RUN useradd -m -d $OD_HOME -s /bin/bash odoo
 RUN useradd -rm -d $OD_HOME -s /bin/bash -g root -u 8069 odoo
 
 # chang own
 RUN mkdir -p ${OD_HOME}/venv \
-    && chown -R odoo /opt/odoo
+    && chown -R odoo ${OD_ROOT}
 
-VOLUME ["/opt/odoo/app", "/opt/odoo/data", "/opt/odoo/home"]
+VOLUME ["${OD_ROOT}/app", "${OD_ROOT}/data", "${OD_ROOT}/home"]
 
-WORKDIR /opt/odoo/home
+WORKDIR ${OD_ROOT}/home
 
 # Expose Odoo services
 EXPOSE 8069 8071 8072
@@ -79,8 +77,8 @@ EXPOSE 8069 8071 8072
 # Set default user when running the container
 USER odoo
 
-#ENV VIRTUAL_ENV ${HOME}/venv
 # virtual env
+#ENV VIRTUAL_ENV ${HOME}/venv
 #RUN python3 -m venv ${HOME}/venv
 #ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
