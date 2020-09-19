@@ -57,8 +57,9 @@ RUN mkdir -p /opt/odoo/app \
 
 # requriements
 ADD requirements.txt ${OD_HOME}
-RUN ls -la ${OD_HOME}
+RUN ls -la ${OD_HOME} \
     && cat ${OD_HOME}/requirements.txt
+    
 RUN pip3 install -r ${OD_HOME}/requirements.txt
 
 #RUN useradd -m -d $OD_HOME -s /bin/bash odoo
