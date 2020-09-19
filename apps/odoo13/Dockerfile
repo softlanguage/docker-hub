@@ -52,6 +52,9 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' > /etc/
 RUN npm install -g rtlcss
 
 # --- begin of softlang -----
+RUN pip3 install wheel \
+    && pip3 install setuptools --upgrade
+    
 ENV OD_ROOT /opt/odoo
 ENV OD_HOME ${OD_ROOT}/home
 RUN mkdir -p ${OD_ROOT}/app \
