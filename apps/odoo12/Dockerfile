@@ -51,6 +51,9 @@ RUN echo "deb http://deb.nodesource.com/node_8.x stretch main" > /etc/apt/source
     && npm install -g rtlcss \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip3 install wheel \
+    && pip3 install setuptools --upgrade
+
 ENV OD_ROOT /opt/odoo
 ENV OD_HOME ${OD_ROOT}/home
 RUN mkdir -p ${OD_ROOT}/app \
