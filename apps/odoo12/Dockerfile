@@ -91,4 +91,4 @@ USER odoo
 #ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # CMD ["python3", "odoo-bin", "-c", "odoo.conf"]
-CMD ["bash", "${OD_HOME}/start-odoo.sh"]
+CMD ["bash", "/opt/odoo/home/start-odoo.sh"]
