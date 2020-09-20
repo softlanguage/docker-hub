@@ -23,7 +23,7 @@ RUN apt-get update \
             libblas-dev \
             libldap2-dev \
             libsasl2-dev \
-            #gcc \
+            gcc \
             python3-phonenumbers \
             python3-pyldap \
             python3-qrcode \
