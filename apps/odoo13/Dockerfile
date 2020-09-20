@@ -1,6 +1,5 @@
 #FROM debian:buster-slim
-#FROM python:3.7-slim-buster
-FROM python:3.7-buster
+FROM python:3.7-slim-buster
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
@@ -12,10 +11,10 @@ RUN apt-get update \
         && apt-get install -y --no-install-recommends \
             curl \
             #ca-certificates \
-            #dirmngr \
+            dirmngr \
             fonts-noto-cjk \
-            #gnupg \
-            #libssl-dev \
+            gnupg \
+            libssl-dev \
             node-less \
             npm \
             python3-num2words \
