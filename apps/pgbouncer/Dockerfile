@@ -1,5 +1,5 @@
 FROM        debian:jessie
-MAINTAINER  Kotaimen <kotaimen.c@gmail.com>
+MAINTAINER  softlang.net
 
 ENV         DEBIAN_FRONTEND noninteractive
 
