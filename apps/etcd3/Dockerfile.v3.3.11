@@ -1,7 +1,7 @@
 FROM alpine:3.12 as build
 
 # https://github.com/etcd-io/etcd/releases/tag/v3.3.11
-ADD https://github.com/etcd-io/etcd/releases/download/v3.3.11/etcd-v3.3.11-linux-amd64.tar.gz /app
+ADD https://github.com/etcd-io/etcd/releases/download/v3.3.11/etcd-v3.3.11-linux-amd64.tar.gz ./
 RUN tar -xzf etcd-v3.3.11-linux-amd64.tar.gz
 RUN pwd
 RUN ls -lh
