@@ -1,18 +1,18 @@
 FROM alpine:3.12 as build
 
-WORKDIR /app
 # https://github.com/etcd-io/etcd/releases/tag/v3.3.11
 ADD https://github.com/etcd-io/etcd/releases/download/v3.3.11/etcd-v3.3.11-linux-amd64.tar.gz /app
 RUN tar -xzf etcd-v3.3.11-linux-amd64.tar.gz
 RUN pwd
 RUN ls -lh
-RUN ls -lh /app/etcd-v3.3.11-linux-amd64
+RUN ls -lh etcd-v3.3.11-linux-amd64
 
 FROM alpine:3.12
 
-RUN ls -lh && ls -lh app && ls -lh /etcd-v3.3.11-linux-amd64
-ADD /app/etcd-v3.3.11-linux-amd64/etcd /usr/local/bin/
-ADD /app/etcd-v3.3.11-linux-amd64/etcdctl /usr/local/bin/
+RUN pwd && ls -lh 
+RUN ls -lh etcd-v3.3.11-linux-amd64
+ADD etcd-v3.3.11-linux-amd64/etcd /usr/local/bin/
+ADD etcd-v3.3.11-linux-amd64/etcdctl /usr/local/bin/
 RUN mkdir -p /var/etcd/
 RUN mkdir -p /var/lib/etcd/
 
