@@ -46,6 +46,7 @@ RUN pwd && ls && cd $PGXL_SOURCE/contrib && make && make install
 
 #-------- build complate -------
 FROM debian:9-slim
+
 ENV POSTGRES_HOME=/usr/local/pgsql
 COPY --from=build $POSTGRES_HOME $POSTGRES_HOME
 
@@ -71,6 +72,11 @@ deb http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib \n\
 deb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib \n\
 " > /etc/apt/sources.list
 
+# 中文支持
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+    && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
+ENV LANG zh_CN.utf8
+
 RUN apt-get update \
 	&& apt-get install -y procps nano \
 	&& apt install -y openssh-server \
@@ -87,10 +93,6 @@ RUN dpkg-reconfigure openssh-server
 RUN mkdir /run/sshd
 RUN echo 'postgres:softlan9' | chpasswd
 #RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
-
-# 支持中文排序
-RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
-ENV LANG zh_CN.utf8
 
 #USER $POSTGRES_USER
 WORKDIR $POSTGRES_DATA
