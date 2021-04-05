@@ -1,0 +1,278 @@
+# docker stack deploy --prune -c docker-compose.yaml pgxl01
+# docker pull softlang/postgres-xl-10r1:1.1
+# docker pull haproxy:2.2-alpine  (LTS)
+# https://github.com/haproxy/haproxy/tree/v2.2.0/examples
+
+version: "3"
+
+networks:
+  default:
+    external:
+      name: mpp
+
+services:
+  mpp-ingress:
+    image: haproxy:2.2-alpine
+    hostname: mpp-ingress
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - 25433:5433
+      - 25432:5432
+      - 25431:81
+    volumes:
+      - "./conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    depends_on:
+      - mppcn01
+      - mppcn02
+      - mppcn03
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-m1.wb]
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+  mppgtmm01:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-gtm-m01
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-gtm-m01:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-m1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppgtmproxy01:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-gtm-proxy01
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-gtm-proxy01:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppgtmproxy02:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-gtm-proxy02
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-gtm-proxy02:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppcn01:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-cn01
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-cn01:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-m1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppcn02:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-cn02
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-cn02:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppcn03:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-cn03
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-cn03:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn01:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn01
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn01:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn02:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn02
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn02:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn03:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn03
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn03:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn04:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn04
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn04:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s1.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn05:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn05
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn05:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn06:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn06
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn06:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn07:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn07
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn07:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+  mppdn08:
+    image: softlang/postgres-xl-10r1:1.1
+    hostname: mpp-dn08
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - mpp-dn08:/app
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.hostname == pgmpp-s2.wb]
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+volumes:
+  mpp-gtm-m01:
+  mpp-gtm-proxy01:
+  mpp-gtm-proxy02:
+  # coordinator node
+  mpp-cn01:
+  mpp-cn02:
+  mpp-cn03:
+  # data node
+  mpp-dn01:
+  mpp-dn02:
+  mpp-dn03:
+  mpp-dn04:
+  mpp-dn05:
+  mpp-dn06:
+  mpp-dn07:
+  mpp-dn08:
