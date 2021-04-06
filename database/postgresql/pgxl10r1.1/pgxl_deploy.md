@@ -102,7 +102,7 @@ default_pool_size = 5
 
 ```yaml
 # docker stack deploy --prune -c docker-compose.yaml pgxl01
-# docker pull softlang/postgres-xl-10r1:1.1
+# docker pull softlang/postgres-cn:xl-10r1
 # docker pull haproxy:2.2-alpine  (LTS)
 # https://github.com/haproxy/haproxy/tree/v2.2.0/examples
 
@@ -139,7 +139,7 @@ services:
           cpus: '0.25'
           memory: 256M
   mppgtmm01:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-gtm-m01
     environment:
       TZ: Asia/Shanghai
@@ -155,7 +155,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppgtmproxy01:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-gtm-proxy01
     environment:
       TZ: Asia/Shanghai
@@ -171,7 +171,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppgtmproxy02:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-gtm-proxy02
     environment:
       TZ: Asia/Shanghai
@@ -187,7 +187,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppcn01:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-cn01
     environment:
       TZ: Asia/Shanghai
@@ -203,7 +203,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppcn02:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-cn02
     environment:
       TZ: Asia/Shanghai
@@ -219,7 +219,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppcn03:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-cn03
     environment:
       TZ: Asia/Shanghai
@@ -235,7 +235,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn01:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn01
     environment:
       TZ: Asia/Shanghai
@@ -251,7 +251,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn02:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn02
     environment:
       TZ: Asia/Shanghai
@@ -267,7 +267,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn03:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn03
     environment:
       TZ: Asia/Shanghai
@@ -283,7 +283,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn04:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn04
     environment:
       TZ: Asia/Shanghai
@@ -299,7 +299,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn05:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn05
     environment:
       TZ: Asia/Shanghai
@@ -315,7 +315,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn06:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn06
     environment:
       TZ: Asia/Shanghai
@@ -331,7 +331,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn07:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn07
     environment:
       TZ: Asia/Shanghai
@@ -347,7 +347,7 @@ services:
           cpus: '0.50'
           memory: 1G
   mppdn08:
-    image: softlang/postgres-xl-10r1:1.1
+    image: softlang/postgres-cn:xl-10r1
     hostname: mpp-dn08
     environment:
       TZ: Asia/Shanghai
