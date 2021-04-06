@@ -94,6 +94,18 @@ RUN mkdir /run/sshd
 RUN echo 'postgres:softlan9' | chpasswd
 #RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
+# ~/.bashrc
+RUN echo '' > /app/.bashrc
+RUN echo "\
+export PGUSER=postgres \n\
+export PGHOME=/usr/local/pgsql \n\
+export PGXC_CTL_HOME=/app/pgxc_ctl \n\
+export LD_LIBRARY_PATH=$PGHOME/lib \n\
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib \n\
+export PATH=$PGHOME/bin:$PATH:$HOME/.local/bin:$HOME/bin \n\
+" > /app/.bashrc
+RUN chown -R $POSTGRES_USER:$POSTGRES_USER $POSTGRES_DATA 
+
 #USER $POSTGRES_USER
 WORKDIR $POSTGRES_DATA
 
