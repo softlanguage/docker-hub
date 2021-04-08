@@ -17,6 +17,8 @@ RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/
 RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-i18n-2.33-r0.apk
 RUN apk add glibc-bin-2.33-r0.apk glibc-i18n-2.33-r0.apk
 RUN rm -rf /var/cache/apk/*
+RUN rm -f /*.apk
 
 RUN /usr/glibc-compat/bin/localedef -i zh_CN -f UTF-8 zh_CN.UTF-8
-ENV LANG zh_CN.UTF-8
+#ENV LANG zh_CN.UTF-8
+ENV LANG zh_CN.utf8
