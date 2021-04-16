@@ -1,0 +1,5 @@
+# docker run --sysctl net.ipv4.ip_forward=1 someimage
+
+sysctls:
+    - net.ipv4.ip_forward=1
+    - net.core.somaxconn=1024
