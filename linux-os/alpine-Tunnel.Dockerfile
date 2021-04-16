@@ -10,6 +10,7 @@ COPY ./shell/alpine-apk-init.sh /
 RUN sh /alpine-apk-init.sh
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 RUN echo 'GatewayPorts yes' >> /etc/ssh/ssh_config
+RUN sysctl -w net.ipv4.ip_forward=1
 
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]
 
