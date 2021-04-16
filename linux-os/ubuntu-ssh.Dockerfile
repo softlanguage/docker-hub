@@ -10,8 +10,7 @@ RUN dpkg-reconfigure openssh-server
 
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 # RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-RUN echo 'root:softlan9' | chpasswd
+# RUN echo 'root:softlan9' | chpasswd
 
 EXPOSE 22
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]
