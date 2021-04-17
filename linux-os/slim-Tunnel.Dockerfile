@@ -1,8 +1,13 @@
 FROM debian:stretch-slim
 
-RUN apt-get update -y && apt-get -y upgrade;
-RUN apt-get -y install openssh-server passwd;
-RUN rm -rf /var/lib/apt/lists/*
+# apt-get -y upgrade
+RUN apt-get update -y && \
+    apt-get -y install openssh-server passwd && \
+    apt-get clean
+    
+RUN rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/lists/*
+
 RUN mkdir -p /var/run/sshd && \
     rm -f /etc/ssh/ssh_host_*key
 
