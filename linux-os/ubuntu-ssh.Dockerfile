@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 
 RUN apt-get update -y && \
-    apt-get -y install openssh-server passwd && \
+    apt-get -y install openssh-server passwd nano && \
     apt-get clean
 
 RUN rm -rf /var/lib/apt/lists/* && \
