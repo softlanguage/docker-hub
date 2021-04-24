@@ -2,7 +2,7 @@
 # service ssh stop/start
 FROM debian:9-slim as build
 
-ARG PGXL_SOURCE=postgres-xl-10r1.1
+ARG PGXL_SOURCE=postgres-xl-9.5r1.6
 
 RUN echo '' > /etc/apt/sources.list
 RUN echo "\
