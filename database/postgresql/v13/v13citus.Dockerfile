@@ -9,7 +9,7 @@ ENV LANG zh_CN.utf8
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates \
-       ostgresql-13-mysql-fdw \
+       postgresql-13-mysql-fdw \
        curl
 
 # citus
