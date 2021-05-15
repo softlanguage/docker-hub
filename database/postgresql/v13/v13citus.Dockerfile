@@ -23,7 +23,7 @@ RUN apt-get purge -y --auto-remove curl \
 # add citus to default PostgreSQL config
 RUN echo "shared_preload_libraries='citus'" >> /usr/share/postgresql/postgresql.conf.sample
 # add health check script
-COPY ../pg_healthcheck ../wait-for-manager.sh /
+COPY pg_healthcheck wait-for-manager.sh /
 RUN chmod +x /wait-for-manager.sh
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
