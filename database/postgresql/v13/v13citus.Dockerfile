@@ -32,3 +32,4 @@ RUN echo "shared_preload_libraries='citus'" >> /usr/share/postgresql/postgresql.
 
 # HEALTHCHECK --interval=4s --start-period=6s CMD /pg_healthcheck
 HEALTHCHECK --interval=4s --start-period=6s CMD pg_isready --timeout=5 --quiet || exit 1
+# docker inspect --format "{{json .State.Health }}" <container name>
