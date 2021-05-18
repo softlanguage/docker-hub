@@ -21,15 +21,17 @@ RUN apt-get purge -y --auto-remove curl \
 
 # add citus to default PostgreSQL config
 RUN echo "shared_preload_libraries='citus'" >> /usr/share/postgresql/postgresql.conf.sample
+
 # add health check script
-# COPY pg_healthcheck wait-for-manager.sh /
-# RUN chmod +x /wait-for-manager.sh && chmod +x /pg_healthcheck
+COPY pg_healthcheck /
+# COPY wait-for-manager.sh /
+RUN chmod +x /pg_healthcheck
+HEALTHCHECK --interval=10s --retries=3 --start-period=6s CMD /pg_healthcheck
 
 # entry point unsets PGPASSWORD, but we need it to connect to workers
 # https://github.com/docker-library/postgres/blob/33bccfcaddd0679f55ee1028c012d26cd196537d/12/docker-entrypoint.sh#L303
 # 需要修改 pg_hba.conf trust connect to workers
 # RUN sed "/unset PGPASSWORD/d" -i /usr/local/bin/docker-entrypoint.sh
 
-# HEALTHCHECK --interval=4s --start-period=6s CMD /pg_healthcheck
-HEALTHCHECK --interval=4s --start-period=6s CMD pg_isready --timeout=5 --quiet || exit 1
+# HEALTHCHECK --interval=4s --start-period=6s CMD pg_isready --timeout=5 --quiet || exit 1
 # docker inspect --format "{{json .State.Health }}" <container name>

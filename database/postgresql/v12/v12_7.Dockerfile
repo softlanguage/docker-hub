@@ -1,15 +1,7 @@
-# 支持中文的postgresql13.2
-FROM postgres:13.2
+# 支持中文的postgresql-12.6
+FROM postgres:12.7
 RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
 ENV LANG zh_CN.utf8
-
-RUN apt-get update \
-	&& apt-get install -y postgresql-13-mysql-fdw
-
-# clean + rm curl
-#RUN apt-get purge -y --auto-remove curl \
-RUN rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
 
 # add health check script
 COPY pg_healthcheck /
