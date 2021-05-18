@@ -1,6 +1,6 @@
-# 支持中文的postgresql13.2
+# 支持中文的postgresql13.3
 # https://github.com/citusdata/docker
-FROM postgres:13.2
+FROM postgres:13.3
 RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
 ENV LANG zh_CN.utf8
 
