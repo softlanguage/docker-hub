@@ -1,0 +1,21 @@
+# 支持中文的postgresql-14 + citus 10.2
+# docker build --shm-size 268435456 --force-rm -f citus.Dockerfile -t myregistry/pg14:fdw-citus10.2 .
+FROM citusdata/citus:10.2-pg14
+RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.utf8
+
+RUN echo '' > /etc/apt/sources.list
+RUN echo "\
+deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib \n\
+deb http://mirrors.aliyun.com/debian-security/ bullseye-security main \n\
+deb http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib \n\
+deb http://mirrors.aliyun.com/debian/ bullseye-backports main non-free contrib \n\
+" > /etc/apt/sources.list
+
+# mysql fdw
+RUN apt-get update \
+	&& apt-get install -y postgresql-14-mysql-fdw postgresql-14-tds-fdw nano
+
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+ENV LANG zh_CN.utf8
