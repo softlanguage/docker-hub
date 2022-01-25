@@ -1,5 +1,6 @@
 # 支持中文的postgresql-14 + citus 10.2
 # docker build --shm-size 268435456 --force-rm -f citus.Dockerfile -t myregistry/pg14:fdw-citus10.2 .
+# docker run -itd --rm --name pgcitus -e POSTGRES_PASSWORD=123654 -p 5430:5433 --network mpp myregistry/pg14:fdw-citus10.2
 FROM citusdata/citus:10.2-pg14
 RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.utf8
 
