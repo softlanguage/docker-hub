@@ -23,6 +23,7 @@ RUN echo "${P_USER}:${P_PASS}" | chpasswd
 ENV DOCKER_GROUP_ID="0"
 ENV DOCKER_GROUP_NAME="nogroup"
 RUN printf "set -e\n\
+echo \n\
 echo ---------- $(date) ----------\n\
 echo user=${P_USER}\n\
 echo pass=${P_PASS}\n\
