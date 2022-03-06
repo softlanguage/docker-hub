@@ -26,7 +26,9 @@ RUN printf "set -e\n\
 echo ---------- $(date) ----------\n\
 echo user=${P_USER}\n\
 echo pass=${P_PASS}\n\
-echo 'docker run -v /var/run/docker.sock:/var/run/docker.sock:ro -e DOCKER_GROUP_ID=0 -e DOCKER_GROUP_NAME=nogroup'\n\
+echo DOCKER_GROUP_ID=\${DOCKER_GROUP_ID}\n\
+echo DOCKER_GROUP_NAME=\${DOCKER_GROUP_NAME}\n\
+echo 'docker run -e DOCKER_GROUP_ID=xx -e DOCKER_GROUP_NAME=xx -v /var/run/docker.sock:/var/run/docker.sock:ro'\n\
 \n\
 if ! grep -q \${DOCKER_GROUP_NAME} /etc/group\n\
 then\n\
