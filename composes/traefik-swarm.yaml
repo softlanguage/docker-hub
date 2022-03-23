@@ -18,8 +18,8 @@ services:
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.exposedByDefault=false"
       - "--providers.docker.swarmModeRefreshSeconds=15s"
-      - "--providers.docker.network=cc_dev_net"
-      - "--entrypoints.dev.address=:8001"
+      - "--providers.docker.network=netdev"
+      - "--entrypoints.dev.address=:8089"
       - "--entrypoints.dev=true"
     ports:
       - "8089:8089"
