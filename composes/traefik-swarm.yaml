@@ -9,7 +9,8 @@ networks:
 
 services:
   traefik:
-    image: "traefik:v2.2"
+    image: sdinc/devops:traefik-v2.5.7
+    #image: "traefik:v2.5.7"
     environment:
       TZ: Asia/Shanghai
     command:
