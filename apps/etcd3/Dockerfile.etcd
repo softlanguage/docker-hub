@@ -1,0 +1,18 @@
+# deb.debian.org
+FROM quay.io/coreos/etcd:v3.4.18
+
+ADD zshrc /root/.zshrc
+ADD config.yaml /root/.etcd_confg.yaml
+ADD compose.yaml /root/.etcd_compose.yaml
+
+# apk mirror
+RUN sed -i s/deb.debian.org/mirrors.aliyun.com/g /etc/apt/sources.list \
+ && sed -i s/security.debian.org/mirrors.aliyun.com/g /etc/apt/sources.list \
+ && apt update && apt install zsh -y && rm -rf /var/lib/apt/lists/* && apt-get clean \
+ && chmod 644 /root/.zshrc && chown 0:0 /root/.zshrc
+
+EXPOSE 2379 2380
+
+CMD ["/usr/local/bin/etcd"]
+
+# docker build --network host --force-rm -f Dockerfile.etcd -t etcd:v3.4.18 .

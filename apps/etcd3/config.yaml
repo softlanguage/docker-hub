@@ -1,0 +1,66 @@
+# etcdctl -w table --endpoints=172.17.0.13:2379,172.17.0.14:2379,172.17.0.3:2379 endpoint status
+# https://raw.githubusercontent.com/etcd-io/etcd/release-3.4/etcd.conf.yml.sample
+# This is the configuration file for the etcd server.
+# Human-readable name for this member.
+name: 'etcd1'
+
+# Path to the data directory.
+data-dir: /etcd_data
+# wal-dir:
+
+# Number of committed transactions to trigger a snapshot to disk.
+snapshot-count: 10000
+
+# Time (in milliseconds) of a heartbeat interval.
+heartbeat-interval: 500
+
+# Time (in milliseconds) for an election to timeout.
+election-timeout: 5000
+
+# Raise alarms when backend size exceeds the given quota. 0 means use the
+# default quota. (1024 * 1024=1mb) * 256 = 268,435,456
+quota-backend-bytes: 268435456
+
+# List of comma separated URLs to listen on for peer traffic.
+listen-peer-urls: http://0.0.0.0:2380
+
+# List of comma separated URLs to listen on for client traffic.
+listen-client-urls: http://0.0.0.0:2379
+
+# Maximum number of snapshot files to retain (0 is unlimited).
+max-snapshots: 5
+
+# Maximum number of wal files to retain (0 is unlimited).
+max-wals: 5
+
+# List of this member's peer URLs to advertise to the rest of the cluster.
+# The URLs needed to be a comma-separated list.
+initial-advertise-peer-urls: http://localhost:2380
+
+# List of this member's client URLs to advertise to the public.
+# The URLs needed to be a comma-separated list.
+advertise-client-urls: http://localhost:2379
+
+# all members
+#initial-cluster: "etcd0=http://172.17.0.3:2380,etcd1=http://172.17.0.13:2380,etcd2=http://172.17.0.14:2380"
+
+# Initial cluster token for the etcd cluster during bootstrap.
+initial-cluster-token: 'etcd1234'
+
+# Initial cluster state ('new' or 'existing').
+initial-cluster-state: 'new'
+
+# Enable runtime profiling data via HTTP server
+enable-pprof: true
+
+#enable-v2: true
+
+# debug-level logging for etcd, zap,capnslog
+debug: false
+logger: capnslog
+log-level: warn
+#log-outputs: [stderr]
+
+# compaction
+auto-compaction-mode: periodic
+auto-compaction-retention: 72h
