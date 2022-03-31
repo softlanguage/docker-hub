@@ -1,0 +1,40 @@
+# docker stack deploy --prune -c docker-compose.yaml cc-gateway
+# docker network create -d overlay --attachable --subnet 192.197.0.1/16 netdev
+version: "3.7"
+
+networks:
+  default:
+    name: "netdev"
+    external: true
+
+services:
+  traefik:
+    image: sdinc/devops:traefik-v2.5.7
+    #image: "traefik:v2.5.7"
+    environment:
+      TZ: Asia/Shanghai
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.swarmModeRefreshSeconds=15s"
+      - "--providers.docker.network=netdev"
+      - "--entrypoints.dev.address=:8089"
+      - "--entrypoints.dev=true"
+    ports:
+      - "8089:8089"
+      - "8088:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 15s
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
