@@ -12,19 +12,19 @@ services:
     entrypoint: /usr/local/bin/etcd
     command: --config-file=/config4etcd.yaml
     volumes:
-      - /opt/containerd/etcd.d/data:/etcd_data
-      - /opt/containerd/etcd.d/config.yaml:/config4etcd.yaml
+      - ./data:/etcd_data
+      - ./config.yaml:/config4etcd.yaml
     environment:
       TZ: "Asia/Shanghai"
-      etcget: "etcdctl get --prefix"
+      ETCDCTL_API: 3
+      etcget: "etcdctl --user= get --prefix"
     network_mode: host
     restart: always
     healthcheck:
       test: ["CMD", "etcdctl", "endpoint", "health","--user=health:health"]
-      interval: 10s
+      interval: 60s
       timeout: 5s
-      retries: 3
-      start_period: 30s # only in swarm mode
+      retries: 2
     deploy:
       resources:
         limits:

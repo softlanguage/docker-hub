@@ -5,6 +5,7 @@ ADD config.yaml /root/.etcd_confg.yaml
 ADD compose.yaml /root/.etcd_compose.yaml
 RUN apk update && apk add tzdata --no-cache && rm /var/cache/apk/ -rf
 
+ENV ETCDCTL_API=3
 EXPOSE 2379 2380
 
 CMD ["/usr/local/bin/etcd"]

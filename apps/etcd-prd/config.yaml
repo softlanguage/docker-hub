@@ -51,7 +51,7 @@ initial-cluster-token: 'etcd4hrisvip4dev'
 initial-cluster-state: 'new'
 
 # Enable runtime profiling data via HTTP server
-enable-pprof: true
+enable-pprof: false
 enable-v2: false
 
 # Enable debug-level logging for etcd.
