@@ -11,3 +11,5 @@ RUN rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
 ENV LANG zh_CN.utf8
+
+# docker run -itd --rm --name pg14 -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:14.5
