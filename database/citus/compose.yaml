@@ -1,0 +1,27 @@
+# docker compose -p pgdb-dev -f compose.yaml up -d
+# docker compose -p pgdb-dev down
+version: "3.7"
+services:
+  pg-m1-dev:
+    image: softlang/citus-cn:v114pg14fdw
+    hostname: pg-m1-dev
+    container_name: pg-m1-dev
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=abc123"
+      - "POSTGRES_DB=app"
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - "./backup:/var/lib/postgresql/backup:rw"
+      - "./data:/var/lib/postgresql/data:rw"
+      - target: /dev/shm
+        type: tmpfs
+    network_mode: host
+    ports:
+      - 5432:5432
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2048M
