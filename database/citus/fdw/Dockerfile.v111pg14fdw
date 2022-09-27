@@ -1,0 +1,15 @@
+# docker build --network host --force-rm -f Dockerfile.citus -t softlang/citus-cn:v111pg14fdw .
+# 支持中文的postgresql-14.5 + citus 11.1
+FROM citusdata/citus:11.1
+RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
+# mysql fdw
+RUN apt-get update \
+	&& apt-get install -y postgresql-14-mysql-fdw postgresql-14-cron
+# postgresql-14-cron
+
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+ENV LANG zh_CN.utf8
+
+# docker run -itd --rm --name pg14 -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:14.5
