@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM alpine:3.13
 ARG VERSION=1.17.0
 
 ENV AUTH_TYPE=plain
