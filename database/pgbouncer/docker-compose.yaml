@@ -1,0 +1,29 @@
+# docker-compose -p bouncer4pg -f compose.yaml up -d
+# docker-compose -p bouncer4pg down
+version: "3.7"
+networks:
+  default:
+    name: mpp
+    external: true
+services:
+  bouncer4pg:
+    image: edoburu/pgbouncer
+    hostname: bouncer-for-pgdb
+    container_name: bouncer-for-pgdb
+    environment:
+       - DB_USER=dev
+       - DB_PASSWORD=123654
+       - DB_HOST=127.0.0.1
+       - DB_PORT=5432
+       #- POOL_MODE=session
+       - POOL_MODE=transaction
+       - ADMIN_USERS=postgres,dev
+       # - DB_NAME=test
+    # network_mode: host
+    ports:
+      - "6432:6432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
