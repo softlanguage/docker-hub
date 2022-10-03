@@ -8,8 +8,7 @@ ENV POOL_MODE=transaction
 
 # Inspiration from https://github.com/gmr/alpine-pgbouncer/blob/master/Dockerfile
 # hadolint ignore=DL3003,DL3018
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh && \
+RUN \
   # security
   apk add -U --no-cache --upgrade busybox && \
   # Download
@@ -36,6 +35,8 @@ RUN chmod +x /entrypoint.sh && \
   rm -rf /tmp/pgbouncer*  && \
   apk del --purge autoconf autoconf-doc automake udns-dev curl gcc libc-dev libevent-dev libtool make libressl-dev pkgconfig
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 USER postgres
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/bin/pgbouncer", "/etc/pgbouncer/pgbouncer.ini"]
