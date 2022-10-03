@@ -7,7 +7,7 @@ networks:
     external: true
 services:
   bouncer4pg:
-    image: edoburu/pgbouncer
+    image: softlang/pgbouncer:v1.17.0
     hostname: bouncer-for-pgdb
     container_name: bouncer-for-pgdb
     environment:
