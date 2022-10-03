@@ -9,7 +9,7 @@ ENV POOL_MODE=transaction
 # Inspiration from https://github.com/gmr/alpine-pgbouncer/blob/master/Dockerfile
 # hadolint ignore=DL3003,DL3018
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh \
+RUN chmod +x /entrypoint.sh && \
   # security
   apk add -U --no-cache --upgrade busybox && \
   # Download
