@@ -13,3 +13,8 @@ RUN go env -w GO111MODULE=on \
 FROM alpine:3.16
 
 COPY --from=builder /go/bin/xo /usr/bin/xo
+
+CMD [ "nc", "-l", "-p", "80" ]
+
+# docker build --force-rm -f xo.Dockerfile -t softlang/devops:go-xo .
+# docker run -itd --rm --name xo -p 8080:80 softlang/devops:go-xo 
