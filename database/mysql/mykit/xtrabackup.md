@@ -4,14 +4,18 @@
 # zyb-uat-recovery shell
 #!/bin/bash
 set -e
+
 echo "----- backup  $(date) ----"
 cmd='xtrabackup --backup --no-timestamp --parallel=2 --stream=xbstream -t=/tmp/xtrabackup '
 echo "start at: $(date)" >> /tmp/debug.log
 ssh -i /backup/id_rsa root@10.8.8.220 "docker exec -i recovery-zyb-mysql-m1 bash -c '$cmd'" | xbstream -x -C /app
 echo "finish at: $(date)" >> /tmp/debug.log
+
 innobackupex --apply-log /app
 echo "apply-log done: $(date)" >> /tmp/debug.log
+
 tail /tmp/debug.log
+
 ```
 
 #### docker exec on swarm service
