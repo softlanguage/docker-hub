@@ -1,0 +1,62 @@
+# Only for mysql 8.0
+# docker_path: /etc/mysql/conf.d/mysqld.cnf)
+[mysqld]
+authentication_policy='mysql_native_password'
+# character collation
+character_set_server=utf8mb4
+collation_server=utf8mb4_general_ci
+skip_character_set_client_handshake
+init_connect='SET NAMES utf8mb4 COLLATE utf8mb4_general_ci'
+#default-time-zone="Asia/Shanghai"
+#bind-address = 127.0.0.1
+mysqlx = 0 #disable x-plugin:33306
+port = 3306
+slow_query_log=1
+long_query_time=1
+log_output='TABLE'
+# sql_mode remove ONLY_FULL_GROUP_BY
+#sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
+#sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
+sql_mode='ERROR_FOR_DIVISION_BY_ZERO'
+max_connect_errors=1024
+
+# performance
+max_connections=1024
+max_allowed_packet=32M
+group_concat_max_len=1048576
+innodb_buffer_pool_size=4096M
+innodb_ft_total_cache_size=512M
+
+# replicate & binlog
+server_id=123
+gtid_mode=on
+enforce_gtid_consistency=on
+relay_log_recovery=ON
+replica_parallel_type=LOGICAL_CLOCK
+replica_parallel_workers=2 
+replica_preserve_commit_order=1
+# slave_pending_jobs_size_max must >= max_allowed_packet
+replica_pending_jobs_size_max=64108864 # 64m
+
+#binlog
+log_error=mysql-error.log
+log_bin=mysql-bin
+log_bin_index=mysql-bin.index
+binlog_cache_size=1M
+max_binlog_cache_size=1G
+log_replica_updates=1
+binlog_format=row
+sync_source_info=1
+sync_binlog=1
+
+# 60*60*24*3=259200s=3days, 30min*60
+binlog_expire_logs_seconds=1800
+binlog_checksum=CRC32
+source_verify_checksum=1
+replica_sql_verify_checksum=1
+
+# **** deprecated and will be removed ****
+# mysql8 master/relay_info default=table
+#master_info_repository=TABLE
+#relay_log_info_repository=TABLE
+#symbolic_links=0
