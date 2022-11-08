@@ -1,0 +1,49 @@
+# docker compose -p mysql8-uat -f compose.yaml up -d
+# docker compose -p mysql8-uat down
+# conf@container:`/etc/mysql/conf.d/mysqld.cnf`
+# docker network create --attachable -d bridge --subnet 172.177.0.0/16 app
+version: "3.7"
+networks:
+  default:
+    name: app
+    external: true
+
+services:
+  mysql8-uat:
+    image: mysql:8.0.29
+    #image: mysql:8.0.29-debian
+    hostname: "mysql8-uat"
+    container_name: "mysql8-uat"
+    environment:
+      TZ: "Asia/Shanghai"
+      MYSQL_ROOT_PASSWORD: "xxxx"
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: "xxxx"
+    volumes:
+      - "./backup:/backup:rw"
+      - "./data:/var/lib/mysql:rw"  
+      - "./conf:/etc/mysql/conf.d:rw"
+    network_mode: host
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  v57-mykit:
+    image: softlang/mysql:v57kit
+    hostname: "v57-mykit"
+    container_name: "v57-mykit"
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      - "./keys:/root/.ssh"
+      - "./backup:/backup:rw"
+      - "./data:/app:rw"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G

@@ -1,0 +1,8 @@
+Host *
+    StrictHostKeyChecking no
+
+Host mysql-prd
+HostName 10.10.0.123
+Port 22
+User root
+IdentityFile ~/.ssh/id_rsa
