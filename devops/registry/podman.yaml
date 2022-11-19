@@ -1,0 +1,41 @@
+# Created with podman-3.4.7
+# podman run -itd --name registry -m 512M --network host registry:2.8.1
+# podman generate kube registry -f podman.yaml # for generate kube.yaml
+# podman play kube --down podman.yaml # for stop & remove
+# podman play kube podman.yaml # for create & start
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: registry_pod
+  labels:
+    app: registry
+spec:
+  containers:
+  - args:
+    - /etc/docker/registry/config.yml
+    image: docker.io/library/registry:2.8.1
+    name: registry
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    resources:
+      limits:
+        memory: 512Mi
+    stdin: true
+    tty: true
+    volumeMounts:
+    - mountPath: /var/lib/registry
+      name: registry-data-0
+    - mountPath: /etc/docker/registry
+      name: registry-data-conf
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: /data/pods/registry/proxy.d/data
+      type: Directory
+    name: registry-data-0
+  - hostPath:
+      path: /data/pods/registry/proxy.d/conf
+      type: Directory
+    name: registry-data-conf

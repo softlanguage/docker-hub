@@ -1,0 +1,23 @@
+# run by docker
+# docker compose -p reg4devops -f compose.yaml up -d
+
+version: '3.7'
+
+services:
+  proxy-io-registry:
+    image: registry:2.8.1
+    hostname: proxy.io.registry
+    container_name: proxy.io.registry
+    restart: always
+    volumes:
+      - ./proxy.d/conf:/etc/docker/registry
+      - ./proxy.d/data:/var/lib/registry
+    environment:
+      TZ: Asia/Shanghai
+    network_mode: host
+    # port 127.0.0.1:5008
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
