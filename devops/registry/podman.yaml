@@ -2,7 +2,7 @@
 # podman run -itd --name registry -m 512M --network host registry:2.8.1
 # podman generate kube registry -f podman.yaml # for generate kube.yaml
 # podman play kube --down podman.yaml # for stop & remove
-# podman play kube podman.yaml # for create & start
+# podman play kube --log-driver=journald podman.yaml # for create & start
 ---
 apiVersion: v1
 kind: Pod
