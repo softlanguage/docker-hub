@@ -13,6 +13,7 @@ systemctl daemon-reload
 ```conf
 # systemctl edit --full docker.slice
 # /etc/systemd/system/docker.slice
+# systemctl enable docker.slice && systemctl restart docker.slice
 # /etc/docker/daemon.json {"cgroup-parent": "/docker.slice"}
 [Unit]
 Description=Docker Slice
@@ -29,6 +30,8 @@ CPUQuota=100%
 #[Service]
 #ExecStartPost=echo 2G > /sys/fs/cgroup/memory/docker/memory.limit_in_bytes
 #Slice=docker.slice
+[Install]
+WantedBy=multi-user.target
 ```
 
 > 3. /etc/docker/daemon.json config
