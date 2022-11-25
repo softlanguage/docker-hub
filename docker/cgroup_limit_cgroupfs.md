@@ -13,7 +13,7 @@ systemctl daemon-reload
 ```conf
 # systemctl edit --full docker.slice
 # /etc/systemd/system/docker.slice
-# /etc/docker/daemon.json {"cgroup-parent": "user-a.slice"}
+# /etc/docker/daemon.json {"cgroup-parent": "/docker.slice"}
 [Unit]
 Description=Docker Slice
 Before=slices.target
