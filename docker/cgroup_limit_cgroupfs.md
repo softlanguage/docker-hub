@@ -1,6 +1,6 @@
 #### docker with  `Cgroup Driver: cgroupfs`
 
-> config systemctl editor: `update-alternatives --config editor`
+> 1. config systemctl editor: `update-alternatives --config editor`
 
 ```shell
 # https://docs.docker.com/engine/reference/commandline/dockerd/
@@ -8,7 +8,7 @@
 systemctl edit --full docker.slice
 systemctl daemon-reload 
 ```
-> the `systemctl edit --full docker.slice` config
+> 2. the `systemctl edit --full docker.slice` config
 
 ```conf
 # systemctl edit --full docker.slice
@@ -30,17 +30,17 @@ CPUQuota=100%
 #Slice=docker.slice
 ```
 
-> /etc/docker/daemon.json config
+> 3. /etc/docker/daemon.json config
 
 ```json
 // /etc/docker/daemon.json  [Cgroup Driver: cgroupfs]
 {
     "exec-opts": ["native.cgroupdriver=cgroupfs"],
-    "cgroup-parent": "user-a.slice"
+    "cgroup-parent": "/docker.slice"
 }
 ```
 
-> try limit memory without restart docker, `no persistent`.
+> 4. try limit memory without restart docker, `no persistent`.
 
 ```shell
 # docker with  `Cgroup Driver: cgroupfs`
