@@ -1,17 +1,21 @@
 #### docker resource limit totally
-> memory test
+
+> try limit memory without restart docker, `no persistent`.
 
 ```shell
+# docker with  `Cgroup Driver: cgroupfs`
+# https://docs.docker.com/engine/reference/commandline/dockerd/
+# set docker memory limits
+echo 2048M > /sys/fs/cgroup/memory/docker/memory.limit_in_bytes
 # docker pull polinux/stress
 docker run -ti --rm --name stress polinux/stress stress --cpu 1 --vm 1 --vm-bytes 3024M  --verbose
 ```
 
+> config systemctl editor: `update-alternatives --config editor`
 > for `Cgroup Driver = systemd`, solution 1
 
-I have a VM with 1 CPU and 2GB RAM (swap disabled).
-Therefore I created the slice with next parameters:
-
 ```conf
+# systemctl edit --full docker_limit.slice
 # cat /etc/systemd/system/docker_limit.slice
 [Unit]
 Description=Slice that limits docker resources
@@ -35,9 +39,10 @@ And I made literally the same things as you, except native cgroupdriver in daemo
 }
 ```
 
-> for ` Cgroup Driver: systemd` , solution 2, only memory limit
+> demo.2 ` Cgroup Driver: systemd` , solution 2, only memory limit
 
 ``` conf
+# systemctl edit --full limit-docker-memory.slice
 # /etc/systemd/system/limit-docker-memory.slice
 [Unit]
 Description=Slice with MemoryLimit=8G for docker
