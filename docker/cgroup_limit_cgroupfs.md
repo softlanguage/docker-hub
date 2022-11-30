@@ -6,7 +6,8 @@
 # https://docs.docker.com/engine/reference/commandline/dockerd/
 # for `Cgroup Driver: cgroupfs`
 systemctl edit --full docker.slice
-systemctl daemon-reload 
+systemctl daemon-reload
+systemctl show docker.slice
 ```
 > 2. the `systemctl edit --full docker.slice` config
 
