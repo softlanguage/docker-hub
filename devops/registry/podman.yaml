@@ -3,6 +3,9 @@
 # podman generate kube registry -f podman.yaml # for generate kube.yaml
 # podman play kube --down podman.yaml # for stop & remove
 # podman play kube --log-driver=journald podman.yaml # for create & start
+# podman generate systemd --help
+# podman generate systemd --name devops-registry
+# systemctl edit --full -f pods-devops-registry.service
 ---
 apiVersion: v1
 kind: Pod
