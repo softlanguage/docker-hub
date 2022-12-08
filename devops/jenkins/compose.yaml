@@ -1,0 +1,31 @@
+# docker compose -p ci-devops-jenkins -f compose.yaml up -d
+# docker compose -p ci-devops-jenkins down
+version: '3.7'
+
+networks:
+  default:
+    external: true
+    name: attach_ci_net
+
+services:
+  jenkins:
+    image: softlang/jenkins:v2.361-lts
+    container_name: ci-devops-jenkins
+    hostname: ci-devops-jenkins
+    user: jenkins
+    ports:
+      - mode: host
+        published: 8080
+        target: 8080
+    volumes:
+      - ./home_data:/var/jenkins_home:rw
+    environment:
+      - "JENKINS_OPTS=--httpPort=8080"
+      #- "JAVA_OPTS=-Xmx128m"
+      #- "TZ=Asia/Shanghai"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
