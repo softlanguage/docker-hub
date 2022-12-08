@@ -1,0 +1,13 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:v2.346-jdk8 .
+# build image
+FROM jenkins/jenkins:2.346.3-2-alpine-jdk8
+
+USER root
+# install build tools
+RUN sed -i s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g /etc/apk/repositories \
+    && apk update && apk add --no-cache docker-cli \
+    && rm -rf /var/cache/apk/*
+
+USER jenkins
+ENV TZ=Asia/Shanghai
+ENV JAVA_OPTS=-Xmx128m 
