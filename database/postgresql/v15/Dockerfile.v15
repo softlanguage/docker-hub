@@ -1,0 +1,15 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:15.1 . 
+# 支持中文的postgresql-15
+FROM postgres:15.1
+RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
+# mysql fdw
+RUN apt-get update \
+	&& apt-get install -y postgresql-15-mysql-fdw postgresql-15-cron
+
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+ENV LANG zh_CN.utf8
+LABEL softlang_tag="pg-v15.1, postgresql-15-mysql-fdw postgresql-15-cron"
+
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.1
