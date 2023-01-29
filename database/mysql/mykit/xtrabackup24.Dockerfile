@@ -9,8 +9,8 @@ FROM ubuntu:focal
 ARG deb_url=https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.26/binary/debian/focal/x86_64/percona-xtrabackup-24_2.4.26-1.focal_amd64.deb
 WORKDIR /app
 ADD $deb_url /app/percona-xtrabackup-24_2.4.26-1.focal_amd64.deb
-RUN apt update && apt install -y wget openssh-client netcat nano \
+RUN apt update && apt install -y wget openssh-client netcat nano zstd \
      /app/percona-xtrabackup-24_2.4.26-1.focal_amd64.deb \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && rm -rf /app/*
 
 CMD [ "nc", "-l", "-p", "8080" ]
