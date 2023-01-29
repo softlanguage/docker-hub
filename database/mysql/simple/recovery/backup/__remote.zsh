@@ -1,8 +1,9 @@
 #!/bin/bash
+# bash /opt/mysql/_conf.d/clone4gig.zsh
 # run at mysql-prd (docker-container for mysql)
-# bash /opt/pods/mysql/_conf.d/bak2uat.zsh
 set -e
 #cmd='pwd && ls'
-cmd='xtrabackup --backup --no-timestamp --parallel=4 --stream=xbstream /tmp/xtrabackup'
-container_id=$(docker container ls  | grep 'zyb-mysql-s3' | awk '{print $1}')
+#cmd='xtrabackup --backup --no-timestamp --parallel=4 --stream=xbstream /tmp/xtrabackup'
+cmd='innobackupex --no-timestamp --parallel=4 --stream=xbstream /tmp/xtrabackup'
+container_id=$(docker ps -f "label=com.docker.swarm.service.name=zyb-mysql-master_zyb-mysql-m1" -q)
 docker exec -i $container_id bash -c "$cmd"
