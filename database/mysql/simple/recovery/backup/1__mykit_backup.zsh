@@ -2,6 +2,7 @@
 # run at mykit__container
 # bash /backup/1__mykit_backup.zsh
 set -e
+TZ=UTC-8
 
 rm -rf /app/* 
 

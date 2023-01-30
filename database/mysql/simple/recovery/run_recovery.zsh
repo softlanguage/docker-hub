@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+TZ=UTC-8
 # err_code=$?; if [ ! $err_code = 0 ]; then echo $err_code; fi
 # set the target docker
 # docker context create ci-uat-db1 --docker "host=ssh://dev@mysql-prd" --description "xxx" 
