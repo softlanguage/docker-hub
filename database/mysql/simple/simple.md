@@ -5,8 +5,8 @@
 # compress
 date && tar -I zstd -cf bak_20230129-192500.zstd.tar -C /work/path ./data  && date
 
-# decompress
-date && tar -I zstd -xf bak_20230129-192500.zstd.tar --strip-components 1  && date
+# decompress to /mysql/data , strip 1-path in tar
+date && tar -I zstd -xf bak_20230129-192500.zstd.tar -C /mysql/data/ --strip-components 1  && date
 
 # list files
 date && tar -I zstd -tf bak_20230129-192500.zstd.tar && date
