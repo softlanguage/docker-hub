@@ -41,6 +41,10 @@ services:
       - "./keys:/root/.ssh"
       - "./backup:/backup:rw"
       - "./data:/app:rw"
+      - "./conf:/etc/mysql/conf.d:rw"
+      - "/mnt/gig/backup/etl220/data:/app:rw"
+      - "/mnt/gig/backup/etl220/gig:/gig/tmp:rw" # for daily backup
+      - "/mnt/prd-nas/bak4zyb/mysql-m1-clone:/gig/clone:r" # the daily backup
     restart: always
     deploy:
       resources:
