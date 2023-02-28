@@ -10,5 +10,7 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
 LABEL demo="docker run -itd --rm --name ngvts -m=64M softlang/nginx:v1.22-vts"
+LABEL notice="/etc/docker/daemon.json {'default-ulimits': {'nofile': {'Name': 'nofile','Hard': 65536,'Soft': 65536}}}"
+
 CMD ["nginx", "-g", "daemon off;"]
 # docker run -itd --rm --name ngvts -m=64M softlang/nginx:v1.22-vts
