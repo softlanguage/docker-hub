@@ -5,7 +5,7 @@ FROM jenkins/jenkins:2.361.4-lts-alpine
 USER root
 # install build tools
 RUN sed -i s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g /etc/apk/repositories \
-    && apk update && apk add --no-cache docker-cli nodejs \
+    && apk update && apk add --no-cache tzdata docker-cli nodejs \
     && rm -rf /var/cache/apk/*
 
 USER jenkins
