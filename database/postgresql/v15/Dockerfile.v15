@@ -1,9 +1,12 @@
 # docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:15.2 . 
-# 支持中文的postgresql-15
+# postgresql-15, support chinese
 FROM postgres:15.2
-RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
-# mysql fdw
-RUN apt-get update \
+
+# install extensions
+ARG apt_mirror="mirrors.cloud.tencent.com"
+RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.list \
+    && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
+    && apt-get update \
 	&& apt-get install -y  iputils-ping wget htop nano \
     postgresql-15-mysql-fdw postgresql-15-cron \
     postgresql-15-repack
