@@ -1,0 +1,44 @@
+# podman play kube compose.yaml
+# podman play kube --down compose.yaml
+# Created with podman-4.4.1
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: pgdb-pod
+  name: pgdb-pod
+spec:
+  containers:
+  - image: docker.io/softlang/postgres-cn:14citus11.2
+    name: data-node
+    securityContext:
+      runAsGroup: 999
+      runAsUser: 999
+    env:
+    - name: POSTGRES_USER
+      value: "postgres"
+    - name: POSTGRES_PASSWORD
+      value: "xxx"
+    - name: TZ
+      value: "Asia/Shanghai"
+    #stdin: true
+    #tty: true
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4096Mi
+    volumeMounts:
+    - mountPath: /var/lib/postgresql/data
+      name: pgdata
+    - mountPath: /dev/shm
+      name: tmpfs
+  hostNetwork: true
+  hostname: pg-dn-01
+  volumes:
+  - hostPath:
+      path: /data/pgdb/data
+      type: Directory
+    name: pgdata
+  - emptyDir:
+      medium: Memory
+    name: tmpfs

@@ -1,6 +1,6 @@
 # docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:14citus11.2 . 
 # docker run -itd --rm --name pg14 -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:14citus11.2
-# 支持中文的postgresql-14.7
+# postgresql-14.7, support chinese
 FROM postgres:14.7
 
 # for psql & pg_healthcheck.sh
@@ -11,9 +11,7 @@ host="127.0.0.1"
 user="\${POSTGRES_USER:-postgres}"
 db="\${POSTGRES_DB:-\$POSTGRES_USER}"
 port="\${PGPORT:-5432}"
-pg_isready -h "\${host}" -p \${port} \
-           -d "\${db}" -U "\${user}" \
-           --timeout=5 --quiet || exit 1
+pg_isready -h \${host} -p \${port} -d \${db} -U \${user} --timeout=5 --quiet || exit 1
 EOF
 
 # install extensions
@@ -31,3 +29,4 @@ RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.lis
 
 ENV LANG zh_CN.utf8
 LABEL softlang_tag="pg-v14.7, postgresql-14-mysql-fdw postgresql-14-cron postgresql-14-repack citus-11.2"
+USER postgres
