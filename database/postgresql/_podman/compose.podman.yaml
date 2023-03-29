@@ -1,5 +1,6 @@
 # podman play kube compose.yaml
 # podman play kube --down compose.yaml
+# systemctl status podman-restart.service
 # Created with podman-4.4.1
 apiVersion: v1
 kind: Pod
