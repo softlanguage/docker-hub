@@ -13,5 +13,5 @@ RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.lis
 
 ENV LANG zh_CN.utf8
 LABEL softlang_tag="pg-v15.2, postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack"
-
+USER postgres
 # docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.2
