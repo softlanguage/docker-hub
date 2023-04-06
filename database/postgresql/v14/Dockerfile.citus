@@ -7,9 +7,9 @@ FROM postgres:14.7
 ENV PGPORT=5432
 HEALTHCHECK --interval=10s --retries=3 --start-period=15s CMD /pg_healthcheck
 COPY <<EOF /pg_healthcheck
-host="127.0.0.1"
+host="/var/run/postgresql"
 user="\${POSTGRES_USER:-postgres}"
-db="\${POSTGRES_DB:-\$POSTGRES_USER}"
+db="\${POSTGRES_DB:-\$user}"
 port="\${PGPORT:-5432}"
 pg_isready -h \${host} -p \${port} -d \${db} -U \${user} --timeout=5 --quiet || exit 1
 EOF
