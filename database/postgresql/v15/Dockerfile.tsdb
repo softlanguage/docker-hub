@@ -1,0 +1,12 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:tsdb15.2 . 
+# postgresql-15, support chinese
+FROM timescale/timescaledb:2.10.1-pg15
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
+    && apk add --no-cache --update musl musl-utils musl-locales tzdata htop iotop \
+    && rm -rf /var/cache/apk/*
+
+LABEL softlang_tag="pg-v15.2, postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack"
+
+USER postgres
+ENV LANG zh_CN.utf8
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:tsdb15.2
