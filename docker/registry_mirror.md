@@ -4,7 +4,8 @@
 # /etc/containers/registries.conf.d/100-registry-mirror.conf
 [[registry]]
 prefix = "*.io"
-location = "rx1g5413.mirror.aliyuncs.com"
+location = "registry.aliyuncs.com/google_containers"
+#location = "rx1g5413.mirror.aliyuncs.com"
 #https://cr.console.aliyun.com/cn-shanghai/instances/mirrors
 
 [[registry]]
