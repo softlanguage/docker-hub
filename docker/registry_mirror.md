@@ -5,17 +5,14 @@
 [[registry]]
 prefix = "docker.io"
 location = "docker.mirrors.ustc.edu.cn"
-insecure = true
+insecure = false
 [[registry]]
-location = "registry.k8s.io"
+prefix = "registry.k8s.io"
 location = "registry.aliyuncs.com/google_containers"
-insecure = false
 [[registry]]
-location = "quay.io"
+prefix = "quay.io"
 location = "quay.mirrors.ustc.edu.cn"
-insecure = false
 [[registry]]
-location = "gcr.io"
+prefix = "gcr.io"
 location = "gcr.mirrors.ustc.edu.cn"
-insecure = false
 ```
