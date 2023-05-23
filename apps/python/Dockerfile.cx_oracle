@@ -1,14 +1,8 @@
-# cx_oracle
+# softlang/python:3.7-cx122oracle
+# docker build --force-rm -t softlang/python:3.7-cx122oracle -f Dockerfile ./cx_oracle/
 FROM python:3.7.16-slim
 
-#ARG apt_mirror="mirrors.cloud.tencent.com"
-#RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.list
-
 RUN apt-get update && apt-get install -y wget
-
-# The `pip` packages by Ubuntu is borken in many ways. Install an up to date
-# version with easy_install instead.
-#RUN easy_install pip
 
 # System dependencies required by cx_Oracle.
 RUN apt-get install -y \
@@ -20,17 +14,24 @@ RUN apt-get install -y \
 # http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
 # converted with `alien -d *.rpm`.
 WORKDIR /tmp
-RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-basic_12.1.0.2.0-2_amd64.deb
-RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-devel_12.1.0.2.0-2_amd64.deb
-RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-sqlplus_12.1.0.2.0-2_amd64.deb
+ADD ./*.deb ./
 RUN dpkg -i /tmp/*.deb
-RUN rm -rf /tmp/*.deb
+RUN rm -rf /tmp/* 
+
+## cleanup
+RUN apt-get clean \ 
+    && apt-get autoclean \
+    && apt-get autoremove --purge -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Yeah, system dependencies are installed so it should work now :-)
-RUN pip install cx_Oracle
-RUN echo /usr/lib/oracle/12.1/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
-ENV ORACLE_HOME=/usr/lib/oracle/12.1/client64
+RUN echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
+RUN useradd -m -d /app -s /bin/bash dev
+USER dev
 WORKDIR /app
+ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64
+ENV PATH=/app/.local/bin:$PATH
+RUN pip install cx_Oracle
 
 # Binaries downloaded from
 # http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
