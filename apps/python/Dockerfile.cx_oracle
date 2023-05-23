@@ -1,0 +1,40 @@
+# cx_oracle
+FROM python:3.7.16-slim
+
+#ARG apt_mirror="mirrors.cloud.tencent.com"
+#RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y wget
+
+# The `pip` packages by Ubuntu is borken in many ways. Install an up to date
+# version with easy_install instead.
+#RUN easy_install pip
+
+# System dependencies required by cx_Oracle.
+RUN apt-get install -y \
+    gcc \
+    python-dev \
+    libaio-dev
+
+# Binaries downloaded from
+# http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
+# converted with `alien -d *.rpm`.
+WORKDIR /tmp
+RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-basic_12.1.0.2.0-2_amd64.deb
+RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-devel_12.1.0.2.0-2_amd64.deb
+RUN wget -q https://github.com/brmzkw/cx_oracle/releases/download/oracle-instantclient12.1/oracle-instantclient12.1-sqlplus_12.1.0.2.0-2_amd64.deb
+RUN dpkg -i /tmp/*.deb
+RUN rm -rf /tmp/*.deb
+
+# Yeah, system dependencies are installed so it should work now :-)
+RUN pip install cx_Oracle
+RUN echo /usr/lib/oracle/12.1/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
+ENV ORACLE_HOME=/usr/lib/oracle/12.1/client64
+WORKDIR /app
+
+# Binaries downloaded from
+# http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
+# converted with `alien -d *.rpm`.
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
