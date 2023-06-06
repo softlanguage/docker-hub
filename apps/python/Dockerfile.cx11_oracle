@@ -1,0 +1,38 @@
+# softlang/python:3.7-cx112oracle
+# docker build --force-rm -t softlang/python:3.7-cx112oracle -f Dockerfile ./cx_oracle/
+FROM python:3.7.16-slim
+
+RUN apt-get update && apt-get install -y wget
+
+# System dependencies required by cx_Oracle.
+RUN apt-get install -y \
+    gcc \
+    python-dev \
+    libaio-dev
+
+# Binaries downloaded from
+# http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
+# converted with `alien -d *.rpm`.
+WORKDIR /tmp
+ADD ./*.deb ./
+RUN dpkg -i /tmp/*.deb
+RUN rm -rf /tmp/* 
+
+## cleanup
+RUN apt-get clean \ 
+    && apt-get autoclean \
+    && apt-get autoremove --purge -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Yeah, system dependencies are installed so it should work now :-)
+RUN echo /usr/lib/oracle/11.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
+RUN useradd -m -d /app -s /bin/bash dev
+USER dev
+WORKDIR /app
+ENV ORACLE_HOME=/usr/lib/oracle/11.2/client64
+ENV PATH=/app/.local/bin:$PATH
+RUN pip install cx_Oracle
+
+# Binaries downloaded from
+# http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
+# converted with `alien -d *.rpm`.
