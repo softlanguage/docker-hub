@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:15.2 . 
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:15.3 . 
 # postgresql-15, support chinese
-FROM postgres:15.2
+FROM postgres:15.3-bullseye
 
 # install extensions
 ARG apt_mirror="mirrors.cloud.tencent.com"
@@ -12,6 +12,6 @@ RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.lis
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV LANG zh_CN.utf8
-LABEL softlang_tag="pg-v15.2, postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack"
+LABEL softlang_tag="pg-v15.3, postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack"
 USER postgres
-# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.2
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.3
