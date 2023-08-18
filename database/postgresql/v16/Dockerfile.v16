@@ -9,6 +9,6 @@ RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
 # LC_COLLATE and LC_CTYPE 
 ENV LC_COLLATE zh_CN.utf8
 ENV LC_CTYPE zh_CN.utf8
-LABEL softlang_tag="softlang postgre-v16, defualt LANG=zh_CN.utf8"
+LABEL softlang_tag="softlang postgre-v16, postgresql-plpython3-16, defualt LANG=zh_CN.utf8"
 USER postgres
 # docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:16

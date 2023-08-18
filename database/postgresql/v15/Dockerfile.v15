@@ -8,10 +8,10 @@ RUN sed -i -E "s/(deb|security).debian.org/${apt_mirror}/g" /etc/apt/sources.lis
     && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
     && apt-get update \
 	&& apt-get install -y iputils-ping wget htop nano procps net-tools \
-    postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack \
+    postgresql-15-mysql-fdw postgresql-plpython3-15 postgresql-15-cron postgresql-15-repack \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV LANG zh_CN.utf8
-LABEL softlang_tag="pg-v15.3, postgresql-15-mysql-fdw postgresql-15-cron postgresql-15-repack"
+LABEL softlang_tag="pg-v15.3, postgresql-15-mysql-fdw postgresql-plpython3-15 postgresql-15-cron postgresql-15-repack"
 USER postgres
 # docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.3
