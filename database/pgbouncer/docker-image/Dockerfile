@@ -1,7 +1,8 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/pgbouncer:v1.19.1 .
+# docker build --network host --force-rm -f Dockerfile -t softlang/pgbouncer:v1.20.1 .
 FROM alpine:3.13
+ARG VERSION=1.20.1
+#ARG VERSION=1.19.1
 #ARG VERSION=1.17.0
-ARG VERSION=1.19.1
 
 ENV AUTH_TYPE=plain
 ENV LISTEN_PORT=6432
