@@ -1,6 +1,8 @@
 # docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.2-lts-jdk17 .
-# build image
-FROM docker.io/jenkins/jenkins:2.414.2-alpine-jdk17
+# https://docs.docker.com/engine/reference/builder/#arg
+ARG image_tag="2.414.2-alpine-jdk17"
+FROM docker.io/jenkins/jenkins:${image_tag}
+ARG image_tag
 
 USER root
 # install build tools
@@ -8,16 +10,24 @@ RUN sed -i s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g /etc/apk/repositories \
     && apk update && apk add --no-cache tzdata docker-cli podman-remote python3 py3-pip \
     && rm -rf /var/cache/apk/*
 
+RUN mkdir -p /jenkins_builds && chown -R jenkins:jenkins /jenkins_builds
+
 USER jenkins
 RUN pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ \
-    && pip config set global.trusted-host mirrors.aliyun.com 
+    && pip config set global.trusted-host mirrors.aliyun.com
 
 #ENV PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple/
 #ENV PIP_TRUSTED_HOST=mirrors.aliyun.com
 ENV TZ 'Asia/Shanghai'
-ENV JAVA_OPTS '-Xmx128m -Djenkins.model.Jenkins.buildsDir=/jenkins_builds/${ITEM_ROOTDIR} -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true'
 ENV JENKINS_OPTS '--httpPort=8080'
 
-LABEL buildsDir=/jenkins_builds/{ITEM_ROOTDIR}
+ARG jenkins_buildsDir='/jenkins_builds/${ITEM_ROOTDIR}'
+ARG JAVA_OPT1='hudson.model.UpdateCenter.never=true'
+ARG JAVA_OPT2="jenkins.model.Jenkins.buildsDir=${jenkins_buildsDir}"
+ARG JAVA_OPT3='hudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true'
+
+ENV JAVA_OPTS "-Xmx128m -D${JAVA_OPT1} -D${JAVA_OPT2} -D${JAVA_OPT3}"
+LABEL softlang_demo "docker run -itd --rm --name jenkins -h jenkins -m 1G softlang/jenkins:2.414.2-lts-jdk17"
+LABEL softlang_buildsDir="${jenkins_buildsDir}"
 
 WORKDIR /tmp
