@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.2-lts-py .
+# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.3-lts-py .
 # build image
-FROM jenkins/jenkins:2.414.2-lts-alpine
+FROM jenkins/jenkins:2.414.3-lts-alpine
 
 USER root
 # install build tools
