@@ -1,0 +1,5 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/redmine:4.1.7-bullseye . 
+FROM docker.io/redmine:4.1.7-bullseye
+
+RUN gem sources --remove https://rubygems.org/ \
+    && gem sources -a https://mirrors.aliyun.com/rubygems/
