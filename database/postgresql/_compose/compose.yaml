@@ -1,0 +1,43 @@
+# docker compose -p v16postgresql -f compose.yaml up -d --build
+# docker compose -p v16postgresql down
+# mkdir -p ./data && chown -R 999:999 ./data
+version: '3.7'
+networks:
+  default:
+    name: net4db
+    #external: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.101.0/24
+
+services:
+  pgdb-v16:
+    image: localhost/postgres:16-bookworm
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    hostname: pgdb-v16
+    container_name: pgdb-v16
+    user: postgres
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=123654
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data
+      - LC_COLLATE=zh_CN.utf8
+      - LC_CTYPE=zh_CN.utf8
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - target: /dev/shm
+        type: tmpfs
+    #network_mode: host
+    ports:
+      - 6432:5432
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2048M
