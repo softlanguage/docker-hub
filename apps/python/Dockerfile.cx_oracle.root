@@ -1,0 +1,15 @@
+# softlang/python:3.7-cx122oracle
+# docker build --force-rm -t softlang/python:3.7-cx122oracle-root -f Dockerfile .
+FROM softlang/python:3.7-cx122oracle
+USER root
+WORKDIR /app
+ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64
+ENV PATH=/app/.local/bin:$PATH
+RUN pip install cx_Oracle
+
+# Binaries downloaded from
+# http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html, then
+# converted with `alien -d *.rpm`.
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm
+#https://github.com/leonnleite/instant-client-oracle/raw/master/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
