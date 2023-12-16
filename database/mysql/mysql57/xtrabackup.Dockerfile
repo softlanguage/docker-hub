@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f mysql.Dockerfile -t softlang/mysql:v5.7.39 .
+# docker build --network host --force-rm -f mysql.Dockerfile -t softlang/mysql:v5.7.41 .
 # mysql:5.7.36
-FROM mysql:5.7.39-debian
+FROM mysql:5.7.41-debian
 
 # https://www.percona.com/downloads/Percona-XtraBackup-2.4/LATEST/
 # https://www.percona.com/downloads/Percona-XtraBackup-8.0/LATEST/
