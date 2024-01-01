@@ -2,7 +2,7 @@
 FROM citusdata/citus:11.3-pg13
 # mysql fdw
 RUN apt-get update \
-	&& apt-get install -y postgresql-13-mysql-fdw postgresql-13-cron \
+	&& apt-get install -y postgresql-13-mysql-fdw postgresql-13-cron iputils-ping wget htop nano procps net-tools rsync \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -14,3 +14,4 @@ ENV LC_CTYPE zh_CN.utf8
 USER postgres
 LABEL softlang_tag="docker run -itd --rm --name pg -e POSTGRES_PASSWORD=123654 softlang/citus-cn:11.3-pg13fdw"
 # docker run -itd --rm --name pg -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:14.5
+# test successed on 01/01/2024
