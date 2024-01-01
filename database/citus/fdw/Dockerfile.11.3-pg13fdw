@@ -1,0 +1,16 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/citus-cn:11.3-pg13fdw .
+FROM citusdata/citus:11.3-pg13
+# mysql fdw
+RUN apt-get update \
+	&& apt-get install -y postgresql-13-mysql-fdw postgresql-13-cron \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 && \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && locale -a
+#ENV LANG en_US.UTF-8
+ENV LC_COLLATE zh_CN.utf8
+ENV LC_CTYPE zh_CN.utf8
+USER postgres
+LABEL softlang_tag="docker run -itd --rm --name pg -e POSTGRES_PASSWORD=123654 softlang/citus-cn:11.3-pg13fdw"
+# docker run -itd --rm --name pg -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:14.5
