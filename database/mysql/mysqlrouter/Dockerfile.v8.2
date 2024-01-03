@@ -1,10 +1,10 @@
 # docker build --network host --force-rm -f Dockerfile -t softlang/mysqlrouter:v8.2 . 
 FROM docker.io/oraclelinux:8
 
-# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-8.2.0-1.el8.x86_64.rpm
-arg rpm1="https://dev.mysql.com/get/mysql80-community-release-el8-9.noarch.rpm"
-RUN dnf install -y $rpm1 \
-    && dnf clean all
+# arg rpm1="https://dev.mysql.com/get/mysql80-community-release-el8-9.noarch.rpm"
+arg rpm2="https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.2.1-1.el8.x86_64.rpm"
+arg rpm3="https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-8.2.0-1.el8.x86_64.rpm"
+RUN dnf install -y python3 lsof $rpm2 $rpm3 && dnf clean all
 
 CMD sh -c 'bash --norc'
 # USER root
