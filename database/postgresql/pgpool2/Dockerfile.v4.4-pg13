@@ -9,4 +9,5 @@ RUN dnf install -y wget \
     && dnf clean all
 
 USER postgres
+CMD sh -c 'bash --norc'
 # docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.4

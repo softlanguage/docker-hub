@@ -1,0 +1,11 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/mysqlrouter:v8.2 . 
+FROM docker.io/oraclelinux:8
+
+# https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-8.2.0-1.el8.x86_64.rpm
+arg rpm1="https://dev.mysql.com/get/mysql80-community-release-el8-9.noarch.rpm"
+RUN dnf install -y $rpm1 \
+    && dnf clean all
+
+CMD sh -c 'bash --norc'
+# USER root
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.4

@@ -1,3 +1,9 @@
+#### readme for mysqlrouter
+
+```txt
+https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-8.2.0-1.el8.x86_64.rpm
+https://dev.mysql.com/get/mysql80-community-release-el8-9.noarch.rpm"
+```
 
 ```shell
 # mysqlrouter read/write split
