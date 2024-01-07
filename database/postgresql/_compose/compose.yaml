@@ -19,7 +19,7 @@ services:
       dockerfile: ./Dockerfile
     hostname: pgdb-v16
     container_name: pgdb-v16
-    #command: sh -c 'exec $(command -v /zyb_start.zsh || echo "bash --norc")'
+    #command: sh -c 'exec $(command -v /zyb_start.zsh || echo "tail -f /dev/null")'
     user: postgres
     environment:
       - TZ=Asia/Shanghai

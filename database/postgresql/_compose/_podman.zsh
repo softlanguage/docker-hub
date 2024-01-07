@@ -17,7 +17,7 @@ podman run -itd --name $mybox -h $mybox --cpus '2' -m 15g \
 	--tmpfs /dev/shm --no-healthcheck \
 	-v $workdir/data:/var/lib/postgresql/data \
 	-v $workdir/backup:/var/lib/postgresql/backup \
-	$img_tag sh -c 'exec $(command -v /zyb_start.zsh || echo "bash --norc")'
+	$img_tag sh -c 'exec $(command -v /zyb_start.zsh || echo "tail -f /dev/null")'
 
 # sh -c 'exec $(command -v /zyb_start.zsh || echo "bash --norc")'
 # pg_basebackup --progress -X stream -U postgres  -h 10.8.8.204 -p 5432 -R -D ./ & disown %-
