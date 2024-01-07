@@ -1,8 +1,16 @@
 #!/bin/bash 
 set -e;
 # psql --set ON_ERROR_STOP=on -d wbbi
-#export DOCKER_CONTEXT=zyb-uat-db1
-pod_pgdb=v13citus113
+export DOCKER_CONTEXT=zyb-uat-db1
+pycmd=docker
+pod_pgdb=pg-m1-uat
+
+#if ! command -v docker > /dev/null
+if [ 'I-zyb-prd-pg-mon1' = $(hostname) ]; then
+  pycmd=podman
+  pod_pgdb=v13citus113
+  DOCKER_CONTEXT=I-zyb-prd-pg-mon1
+fi
 
 # prints "xxxx"
 function prints(){
@@ -10,19 +18,22 @@ function prints(){
   printf "$(date "+%Y-%m-%d %H:%M:%S") --> $log\n"
 }
 
+prints $DOCKER_CONTEXT '/' $pycmd '/' $pod_pgdb 
+#exit 0
+
 function pyarn(){
-  podman $@
+  $pycmd $@
 }
 
 prints "stop UAT postgresql"
-# podman run img sh -c 'exec $(command -v /zyb_start.zsh || echo "bash --norc")'
+# podman run img sh -c 'exec $(command -v /zyb_start.zsh || echo "tail -f /dev/null")'
 pyarn exec -i -u root $pod_pgdb bash <<'EOF'
 rm -f /zyb_start.zsh
 EOF
 
 pyarn restart -t 15 $pod_pgdb
 
-prints "Recovering ...." && sleep 5
+prints "Recovering ...." && sleep 3
 
 pyarn exec -i -u postgres $pod_pgdb bash <<'EOF'
 set -e
@@ -30,6 +41,8 @@ set -e
 # restore
 rm -rf /var/lib/postgresql/data/*
 pg_basebackup -v -c fast -X stream -U replica_only -h 10.8.8.204 -p 5432 -D $HOME/data # & disown %-
+
+# timeout 5 sh -c 'while ! pgrep pg_basebackup; do sleep 2; done;'
 
 # postgres -p12345, PGPORT=12345
 postgres -h 127.0.0.1 & disown %-
@@ -48,9 +61,10 @@ ALTER USER MAPPING FOR zyb SERVER foreign_server_mysqlprd OPTIONS (SET password 
 ALTER USER MAPPING FOR postgres SERVER foreign_server_mysqlprd OPTIONS (SET password 'xxx');
 -- users
 -- ALTER ROLE reader RENAME TO readonly;
-ALTER ROLE readonly WITH PASSWORD 'xx' LOGIN;
-ALTER ROLE postgres WITH PASSWORD 'xx';
+ALTER ROLE readonly WITH PASSWORD 'xxx' LOGIN;
+ALTER ROLE postgres WITH PASSWORD 'xxx';
 ALTER ROLE dba WITH PASSWORD 'xxx';
+ALTER ROLE zyb WITH PASSWORD 'xxx';
 -- ALTER ROLE dev RENAME TO zyb;
 PSQL
 EOF
@@ -62,6 +76,6 @@ echo "exec postgres" > /zyb_start.zsh
 chmod +x /zyb_start.zsh
 EOF
 
-pyarn restart -t 15 $pod_pgdb && sleep 5
+pyarn restart -t 15 $pod_pgdb && sleep 3
 
 prints "success"
