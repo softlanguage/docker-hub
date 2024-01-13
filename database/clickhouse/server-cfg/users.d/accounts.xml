@@ -1,0 +1,25 @@
+<clickhouse>
+    <users>
+        <default>
+            <networks>
+                <!-- 
+                <ip>::1</ip>
+                <ip>127.0.0.1</ip> -->
+                <ip>::/0</ip>
+            </networks>
+            <!-- User can create other users and grant rights to them. -->
+            <access_management>1</access_management>
+            <!-- If you want to specify password in plaintext (not recommended), place it in 'password' element. -->
+        </default>
+        <dev>
+            <password>123456</password>
+            <!-- databases -->
+            <allow_databases>
+                <database>demo</database>
+            </allow_databases>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+        </dev>
+    </users>
+</clickhouse>

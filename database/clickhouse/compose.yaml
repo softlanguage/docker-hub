@@ -1,0 +1,44 @@
+# docker compose -p clickhouse-m1 -f compose.yaml up -d
+# docker compose -p clickhouse-m1 down
+# chown -R 101:101 ./server-cfg
+version: '3.8'
+
+networks:
+  default:
+    external: true
+    name: apps
+
+services:
+  clickhouse-xlog: 
+    # 23.3.10.5-lts
+    image: clickhouse/clickhouse-server:23.3.10.5
+    hostname: clickhouse-xlog
+    container_name: clickhouse-xlog
+    command: |
+            /bin/bash -c '
+            if ! command -v psql > /dev/null; then
+            echo "Installing postgresql-client.."
+            apt update -qq && apt install -y postgresql-client -qq
+            fi                              
+            psql -V
+            exec /usr/bin/clickhouse su "clickhouse:clickhouse" /usr/bin/clickhouse-server --config-file=$$CLICKHOUSE_CONFIG
+            '
+    restart: always
+    #network_mode: host
+    ports:
+      - 9000:9000
+      - 8123:8123
+    volumes:
+      - ./data:/var/lib/clickhouse
+      - ./server-cfg/config.d:/etc/clickhouse-server/config.d
+      - ./server-cfg/users.d:/etc/clickhouse-server/users.d
+      - /mnt/nas4dev/ci/devops/database/clickhouse/python:/zyb/pyclickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    deploy:
+      resources:
+        limits:
+          cpus: '1,2,3'
+          memory: 6400M
