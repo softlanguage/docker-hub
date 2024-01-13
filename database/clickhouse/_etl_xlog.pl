@@ -12,7 +12,7 @@ sub get_short_date { return int(POSIX::strftime('%Y%m%d', localtime)); }
 sub subtract_days {
 	my ($sub_val) = shift;
 	my $epoc = time();
-	my $epoc = $epoc - ($sub_val * 24 * 60 * 60);   # 365 days before today
+	$epoc = $epoc - ($sub_val * 24 * 60 * 60);   # 365 days before today
 	my $t1 = POSIX::strftime('%Y%m%d', localtime($epoc));
 	return $t1;
 }
