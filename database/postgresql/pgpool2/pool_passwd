@@ -1,0 +1,5 @@
+#https://www.pgpool.net/docs/42/en/html/auth-methods.html
+#username:plain_text_passwd
+#username:AES_encrypted_passwd
+readonly:Read123
+pgadmin:xxx
