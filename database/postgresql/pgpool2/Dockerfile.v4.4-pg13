@@ -1,13 +1,14 @@
 # docker build --network host --force-rm -f Dockerfile -t softlang/pgpool:v4.4.3 . 
+# https://download.postgresql.org/pub/repos/yum/
+# https://download.postgresql.org/pub/repos/yum/13/redhat/rhel-8.9-x86_64/pgpool-II-13-4.1.4-1.rhel8.x86_64.rpm
+# 
 FROM docker.io/oraclelinux:8
 
 arg rpm_tmp=/tmp/pgpoolII.rpm
 arg rpm1="https://www.pgpool.net/yum/rpms/4.4/redhat/rhel-8-x86_64/pgpool-II-pg13-4.4.5-1pgdg.rhel8.x86_64.rpm"
-RUN dnf install -y wget \
-    && wget -c $rpm1 -O $rpm_tmp -c \
-    && dnf install -y $rpm_tmp \
-    && dnf clean all
+#wget -c $rpm1 -O $rpm_tmp -c \
+RUN dnf install -y wget lsof telnet postgresql $rpm1 && dnf clean all
 
 USER postgres
-CMD sh -c 'bash --norc'
+CMD sh -c 'exec tail -f /dev/null'
 # docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:15.4
