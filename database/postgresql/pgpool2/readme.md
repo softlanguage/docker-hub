@@ -14,7 +14,7 @@ runuser -u postgres --  pgpool -f $workdir/pgpool.conf -n -D #-d
 - test for read write split
 
 ```shell
-CREATE ROLE sr_check_user WITH LOGIN PASSWORD 'password';
+CREATE ROLE sr_check_user WITH NOINHERIT LOGIN PASSWORD 'password';
 # query the server ip
 PGPASSWORD=xxx psql -h 10.8.8.220 -p 8986 -U pgadmin -d demo -c 'select inet_server_addr();'
 PGPASSWORD=xxx psql -h 10.8.8.220 -p 8986 -U pgadmin -d demo -c 'select inet_server_addr() for update;'
