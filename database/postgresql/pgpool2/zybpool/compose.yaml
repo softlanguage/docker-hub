@@ -1,0 +1,42 @@
+# docker compose -p pgpool2 -f compose.yaml up -d --remove-orphans
+# docker compose -p pgpool2 down
+version: '3.8'
+#networks:
+#  default:
+#    external: true
+#    name: app
+
+services:
+  pgpool: 
+    image: docker.io/softlang/pgpool:v4.4.3
+    hostname: pgpool-ii
+    container_name: pgpool-ii
+    init: true
+    command: |
+            /bin/sh -c '
+            grep "postgres" /etc/passwd
+            if command -v /workdir/run.zsh > /dev/null; then
+              exec /workdir/run.zsh
+            fi
+            echo "Error: no /workdir/run.zsh"
+            exec tail -f /dev/null
+            '
+    restart: always
+    network_mode: host
+    #ports:
+    #  - 5678:5432
+    environment:
+      - TZ=Asia/Shanghai
+      - PGHOST=/workdir/socks
+      - PGPORT=5678
+    volumes:
+      - ./workdir/:/workdir
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M

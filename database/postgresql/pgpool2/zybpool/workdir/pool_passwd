@@ -1,0 +1,3 @@
+#username:AES_encrypted_passwd
+#username:plain_text_passwd
+readonly:Read123
