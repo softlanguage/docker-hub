@@ -1,3 +1,4 @@
+#pgpool -f /workdir/pgpool.conf reload
 #username:AES_encrypted_passwd
 #username:plain_text_passwd
 readonly:Read123

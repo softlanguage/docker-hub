@@ -1,5 +1,5 @@
-# docker compose -p pgpool2 -f compose.yaml up -d --remove-orphans
-# docker compose -p pgpool2 down
+# docker compose -p ii-pgpool2 -f compose.yaml up -d --remove-orphans
+# docker compose -p ii-pgpool2 down
 version: '3.8'
 #networks:
 #  default:
@@ -9,8 +9,8 @@ version: '3.8'
 services:
   pgpool: 
     image: docker.io/softlang/pgpool:v4.4.3
-    hostname: pgpool-ii
-    container_name: pgpool-ii
+    hostname: ii-pgpool2
+    container_name: ii-pgpool2
     init: true
     command: |
             /bin/sh -c '
