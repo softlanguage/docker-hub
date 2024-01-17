@@ -11,7 +11,9 @@ pgbench -h10.8.8.220 -p5678 -Ureadonly -n -S -c 32 -C -S -T 300 demo
 /*NO LOAD BALANCE*/ -- only run on primary
 select inet_server_addr()::text, now()::text as ip_time
 for update;
-s
+
+-- user # host postgres sr_check_user 10.0.0.0/8 trust # pg_hba.conf
+CREATE ROLE sr_check_user WITH NOINHERIT LOGIN;
 -- psql
 show pool_pools;
 ```
