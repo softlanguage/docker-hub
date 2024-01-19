@@ -1,5 +1,13 @@
 - _run_pgpool.zsh
 
+```sh
+docker logs nginx 2>&1 | grep "127."
+docker logs --details -n 2000 ii-pgpool2 2>&1 |grep 'Error'|wc -l
+#this can happen if the container is logging to stderr, piping works only for stdout, so try:
+# "2>&1" will tell the shell to redirect stderr to stdout
+#"|" to give the "unified" output to grep using pipe
+```
+
 ```shell
 set -e
 workdir=$(realpath $(dirname $0))
