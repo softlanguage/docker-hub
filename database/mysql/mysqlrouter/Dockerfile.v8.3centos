@@ -1,0 +1,14 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/mysqlrouter:v8.3 . 
+FROM quay.io/centos/centos:stream9
+#FROM docker.io/oraclelinux:8
+
+# arg rpm1="https://dev.mysql.com/get/mysql80-community-release-el8-9.noarch.rpm"
+arg rpm2="https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.3.0-1.el9.x86_64.rpm"
+arg rpm3="https://dev.mysql.com/get/Downloads/MySQL-Router/mysql-router-community-8.3.0-1.el9.x86_64.rpm"
+RUN dnf install -y wget lsof telnet mysql $rpm2 $rpm3 && dnf clean all
+# mysql=mysql client
+
+CMD sh -c 'exec tail -f /dev/null'
+# USER root
+# docker run -itd --rm --name mysql -e -e MYSQL_ROOT_PASSWORD=123654 mysql:8.0.35-oraclelinux8
+
