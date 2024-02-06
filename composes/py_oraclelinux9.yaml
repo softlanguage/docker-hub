@@ -1,0 +1,35 @@
+# docker compose -p oraclelinux9pyarn -f compose.yaml up -d
+# docker compose -p oraclelinux9pyarn down
+version: "3.8"
+volumes:
+  pyarn-root:
+    name: pyarn-root
+  pyarn-home:
+    name: pyarn-home
+services:
+  oraclelinux9pyarn:
+    image: docker.io/oraclelinux:9
+    hostname: oraclelinux9pyarn
+    container_name: oraclelinux9pyarn
+    environment:
+       - TZ=Asia/Shanghai
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: 3
+          memory: 4g
+    volumes:
+      - pyarn-root:/root
+      - pyarn-home:/home
+      - /opt:/opt
+    command: |
+      set -e
+      # dnf install -y wget lsof telnet # openssh-server
+      if [[ ! -d ~/.ssh ]]; then
+        mkdir -p ~/.ssh && chmod 0600 ~/.ssh
+        ssh-keygen -t rsa -f ~/.ssh/ssh_host_rsa_key -N '' >/dev/null
+        echo "SSH key generated successfully."
+      fi
+      echo "sshd listening on ${port:-2222} ..."
+      exec /usr/sbin/sshd -h ~/.ssh/ssh_host_rsa_key -D -p${port:-2222}
