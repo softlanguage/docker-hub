@@ -1,4 +1,4 @@
-# docker compose -p oraclelinux9pyarn -f compose.yaml up -d
+# port=10092 docker compose -p oraclelinux9pyarn -f compose.yaml up -d
 # docker compose -p oraclelinux9pyarn down
 version: "3.8"
 volumes:
@@ -28,7 +28,7 @@ services:
     command: |
       bash -c '
       set -e
-      # dnf install -y wget lsof telnet # openssh-server
+      # dnf install -y ncurses wget lsof telnet # openssh-server, ncurses=clear
       if [[ ! -d ~/.ssh ]]; then
         mkdir -p ~/.ssh && chmod 0600 ~/.ssh
         ssh-keygen -t rsa -f ~/.ssh/ssh_host_rsa_key -N "" >/dev/null
