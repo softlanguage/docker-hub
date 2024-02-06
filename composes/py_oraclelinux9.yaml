@@ -11,6 +11,8 @@ services:
     image: docker.io/oraclelinux:9
     hostname: oraclelinux9pyarn
     container_name: oraclelinux9pyarn
+    restart: always
+    init: true
     environment:
        - TZ=Asia/Shanghai
     network_mode: host
@@ -24,12 +26,14 @@ services:
       - pyarn-home:/home
       - /opt:/opt
     command: |
+      bash -c '
       set -e
       # dnf install -y wget lsof telnet # openssh-server
       if [[ ! -d ~/.ssh ]]; then
         mkdir -p ~/.ssh && chmod 0600 ~/.ssh
-        ssh-keygen -t rsa -f ~/.ssh/ssh_host_rsa_key -N '' >/dev/null
+        ssh-keygen -t rsa -f ~/.ssh/ssh_host_rsa_key -N "" >/dev/null
         echo "SSH key generated successfully."
       fi
       echo "sshd listening on ${port:-2222} ..."
       exec /usr/sbin/sshd -h ~/.ssh/ssh_host_rsa_key -D -p${port:-2222}
+      '
