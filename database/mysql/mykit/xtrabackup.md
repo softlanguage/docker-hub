@@ -2,15 +2,20 @@
 
 ```shell
 #!/bin/bash
-# backup to NAS
+# bash /opt/mysql/_conf.d/clone4gig.zsh
 set -e
 time_start=$(date)
+tar_file="bak_$(date +%Y%m%d-%H%M%S).zstd.tar" 
 #cmd='innobackupex --no-timestamp --parallel=3 --stream=xbstream /tmp/xtrabackup'
 cmd='innobackupex --no-timestamp --stream=tar /tmp/xtrabackup'
 container_id=$(docker ps -f "label=com.docker.swarm.service.name=zyb-mysql-master_zyb-mysql-m1" -q)
-docker exec -i $container_id bash -c "$cmd" | zstd > /mnt/prd-nas/bak4zyb/mysql-m1-clone/xtrabackup_01.xbstream.zst
+docker exec -i $container_id bash -c "$cmd" | zstd > /mnt/prd-nas/bak4zyb/mysql-m1-clone/$tar_file
 
 echo "done. $time_start  ~  $(date)"
+
+# clearnup , retention 100 days
+find /mnt/prd-nas/bak4zyb/mysql-m1-clone/ -name '*.zstd.tar' -type f -mtime +100 -print -exec rm -rf {} \; 
+
 ```
 
 ```shell
