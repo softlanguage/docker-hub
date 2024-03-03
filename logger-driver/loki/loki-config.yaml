@@ -1,0 +1,67 @@
+analytics:
+  reporting_enabled: false
+
+auth_enabled: false
+
+ruler:
+  alertmanager_url: http://localhost:9093
+
+server:
+  http_listen_port: 3100
+  log_level: warn
+  # [debug, info, warn, error] (default info)
+
+# Retention (limits_config.retention_period>=24h)
+# https://grafana.com/docs/loki/latest/operations/storage/retention/
+compactor:
+  compaction_interval: 30m # 30minutes
+  retention_enabled: true
+  retention_delete_delay: 2h # 2hours
+  retention_delete_worker_count: 16 # the max goroutine workers
+
+limits_config:
+  ingestion_rate_mb: 50  # units in MB, 0=No limit on ingestion rate
+  max_streams_per_user: 0  # No limit on streams per tenant
+  max_query_length: 1h  # No limit on query length
+  max_query_lookback: 72h  # No limit on query time range
+  retention_period: 72h # 14d=240h, The minimum retention period is 24h.
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 32
+
+common:
+  path_prefix: /data/loki
+  storage:
+    filesystem:
+      chunks_directory: /data/loki/chunks
+      rules_directory: /data/loki/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 0.0.0.0
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2001-01-01
+      store: tsdb
+      object_store: filesystem
+      schema: v12
+      index:
+        prefix: index_
+        period: 24h
+
+ingester:
+  wal:
+    dir: /data/loki/wal
+    replay_memory_ceiling: 256MB
+
+# CLI flag: -ingester.wal-replay-memory-ceiling
+# Maximum memory size the WAL may use during replay. After hitting this, it
+# will flush data to storage before continuing. A unit suffix (KB, MB, GB) may
+# be applied.
+# https://grafana.com/docs/loki/latest/configure/#ingester

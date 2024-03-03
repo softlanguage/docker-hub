@@ -1,0 +1,51 @@
+# docker compose -f compose.yaml -p grafana up -d
+# docker compose -p grafana down 
+version: '3.7'
+networks:
+  default:
+    name: apps
+    external: true
+services:
+  loki:
+    image: grafana/loki:2.9.3
+    container_name: loki-zyb
+    hostname: loki-zyb
+    restart: always
+    ports:
+      - 3100:3100
+    volumes:
+      - ./conf.d/loki-config.yaml:/etc/loki/local-config.yaml \
+      - ./data/:/data
+    environment:
+      TZ: "Asia/Shanghai"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+  grafana:
+    image: grafana/grafana:10.1.6
+    container_name: grafana
+    hostname: grafana
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      TZ: "Asia/Shanghai"
+    logging:
+      driver: loki
+      options:
+        loki-url: http://loki:3100/loki/api/v1/push
+        loki-external-labels: cluster=docker_swarm,job=docker,container_name={{.Name}}
+        max-size: 20m
+        max-file: 2
+        loki-retries: 2
+        loki-timeout: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+          
