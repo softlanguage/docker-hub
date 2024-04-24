@@ -1,0 +1,18 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.3-lts-slim .
+# build image
+FROM jenkins/jenkins:2.414.3-lts-slim
+
+USER root
+ARG docker_cli_url=https://download.docker.com/linux/debian/dists/bookworm/pool/stable/amd64/docker-ce-cli_24.0.9-1~debian.12~bookworm_amd64.deb
+ARG docker_cli_deb=/tmp/docker-ce-cli_24.0.9.deb
+
+ADD $docker_cli_url $docker_cli_deb
+
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g'  /etc/apt/sources.list.d/debian.sources \
+    && apt update && apt install -y python3 $docker_cli_deb \
+    && rm -rf /var/cache/apk/* && rm -rf $docker_cli_deb
+
+USER jenkins
+ENV TZ=Asia/Shanghai
+ENV JAVA_OPTS=-Xmx128m 
+WORKDIR /tmp
