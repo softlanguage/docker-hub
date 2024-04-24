@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.3-lts-slim .
+# docker build --network host --force-rm -f Dockerfile -t softlang/jenkins:2.414.3-lts-bookworm .
 # build image
-FROM jenkins/jenkins:2.414.3-lts-slim
+FROM jenkins/jenkins:2.414.3-lts
 
 USER root
 ARG docker_cli_url=https://download.docker.com/linux/debian/dists/bookworm/pool/stable/amd64/docker-ce-cli_24.0.9-1~debian.12~bookworm_amd64.deb
