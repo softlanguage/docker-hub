@@ -2,7 +2,7 @@
 # https://docs.docker.com/build/building/context/#git-repositories
 # https://github.com/strapi/strapi.git#v4.20.5
 # docker build --build-arg JWT_SECRET=$(openssl rand --base64 32) -t softlang/strapi:4.20 -f-<<'__dockerfile__' .
-FROM node:18-slim as builder
+FROM node:18-alpine as builder
 USER node
 ARG JWT_SECRET
 ENV NODE_ENV=production
@@ -10,7 +10,7 @@ WORKDIR /home/node/app
 # JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'));")
 RUN npx create-strapi-app@4.20.5 . --quickstart --no-run
 # runtime
-FROM node:18-slim
+FROM node:18-alpine
 COPY --from=builder /home/node/app /home/node/app
 RUN chown -R node:node /home/node
 USER node
