@@ -15,3 +15,6 @@ ENV JWT_SECRET=$jwt_secret
 EXPOSE 1337
 CMD ["npm", "run", "start"]
 #__dockerfile__
+
+# how to run?
+# docker run -d --name strapi --network host -e JWT_SECRET=$(openssl rand --base64 32) softlang/strapi:4.20
