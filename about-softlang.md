@@ -12,3 +12,12 @@ https://hub.docker.com/repository/docker/softlang
 > *docker pull softlang/openjdk8-alpine:Fontconfig*
 
 > https://hub.docker.com/r/softlang/openjdk8-alpine
+
+
+- sample of COPW and --chown=user:group
+```Dockerfile
+FROM node:18-alpine
+USER node
+WORKDIR /home/node/app
+COPY --from=builder --chown=node:node /home/node/app /home/node/app
+```

@@ -11,13 +11,12 @@ WORKDIR /home/node/app
 RUN npx create-strapi-app@4.20.5 . --quickstart --no-run
 # runtime
 FROM node:18-alpine
-COPY --from=builder /home/node/app /home/node/app
-RUN chown -R node:node /home/node
 USER node
-ARG JWT_SECRET
 WORKDIR /home/node/app
-ENV NODE_ENV=production
+COPY --from=builder --chown=node:node /home/node/app /home/node/app
+ARG JWT_SECRET
 ENV JWT_SECRET=${JWT_SECRET}
+ENV NODE_ENV=production
 EXPOSE 1337
 CMD ["npm", "run", "start"]
 #__dockerfile__
