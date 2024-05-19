@@ -13,6 +13,7 @@ RUN npx create-strapi-app@4.20.5 . --quickstart --no-run
 FROM node:18-alpine
 USER node
 WORKDIR /home/node/app
+# --chown=user:group will reduce volume of image layer
 COPY --from=builder --chown=node:node /home/node/app /home/node/app
 ARG JWT_SECRET
 ENV JWT_SECRET=${JWT_SECRET}
