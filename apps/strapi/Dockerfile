@@ -9,6 +9,7 @@ ENV NODE_ENV=production
 WORKDIR /home/node/app
 # JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'));")
 RUN npx create-strapi-app@4.20.5 . --quickstart --no-run
+RUN npm run build
 # runtime
 FROM node:18-alpine
 USER node
