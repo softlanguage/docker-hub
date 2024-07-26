@@ -14,15 +14,8 @@ for i in "${images[@]}"; do
 sh -c "crane copy docker.io/$i docker.io/softlang/$i $platform"
 done
 
-# --- copy from docker.io ----
-images=(metrics-server/metrics-server:v0.6.3
-metrics-server/metrics-server:v0.6.4
-metrics-server/metrics-server:v0.7.1
-)
 # registry.k8s.io
-for i in "${images[@]}"; do
-crane copy registry.k8s.io/$i docker.io/softlang/$i $platform
-done
+crane copy registry.k8s.io/metrics-server/metrics-server:v0.7.1 docker.io/softlang/metrics-server:v0.7.1 $platform
 
 function config_k8s_images(){
     # kubeadm config images list # to list all k8s images
