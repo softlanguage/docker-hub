@@ -1,0 +1,33 @@
+# docker compose -p gpdb7 -f compose.yaml up -d
+# docker compose -p gpdb7 down
+networks:
+  default:
+    name: apps
+    external: true
+services:
+  gpdb7rhel8:
+    #image: docker.io/oraclelinux:8
+    image: localhost/gpdb7:rhel8
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    hostname: gpdb7rhel8.local
+    container_name: gpdb7rhel8.local
+    restart: always
+    environment:
+       - TZ=Asia/Shanghai
+    ports:
+      - 5677:5677
+    extra_hosts:
+      - "gp7m1.local:127.0.0.1"
+      - "gp7s1.local:127.0.0.1"
+      - "gp7s2.local:127.0.0.1"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 6g
+    working_dir: /mpp
+    volumes:
+      - ./mpp/dist:/mpp/dist
+    command: /usr/sbin/sshd  -D -p22
