@@ -7,10 +7,11 @@ RUN dnf install hostname wget lsof telnet &&\
     localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 &&\
     dnf install -y /tmp/greenplum*.rpm &&\
     python3.11 -m ensurepip &&\
-    dnf clean all &&\
+    dnf clean all && rm -rf /tmp/greenplum*.rpm &&\
     ssh-keygen -A
 
 ENV PGPORT=5677
+ENV PGDATABASE=postgres
 VOLUME /mpp/dist
 
 RUN mkdir -p /mpp/dist/{master,node1,node2} && \

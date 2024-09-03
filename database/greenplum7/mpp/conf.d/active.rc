@@ -1,0 +1,4 @@
+# append to ~/.bashrc
+export PGPORT=5677
+export PGDATABASE=demo
+export COORDINATOR_DATA_DIRECTORY=/mpp/dist/gpsne-1

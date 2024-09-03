@@ -1,6 +1,7 @@
 # python3.11 -m ensurepip
 # python3.11 -m pip install psycopg[binary,pool]
 # /usr/bin/python3.11 vacuum.py
+# python3.11 -m pip install psycopg[binary,pool] -i http://mirrors.cloud.aliyuncs.com/pypi/simple/ --trusted-host mirrors.cloud.aliyuncs.com
 # import psycopg
 import psycopg_pool as pool
 import datetime
