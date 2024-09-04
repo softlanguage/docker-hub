@@ -1,4 +1,10 @@
 # append to ~/.bashrc
 export PGPORT=5677
 export PGDATABASE=demo
+export USER=gpadmin
 export COORDINATOR_DATA_DIRECTORY=/mpp/dist/gpsne-1
+
+# ssh-keygen
+# cp -a ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+# chmod 0600 ~/.ssh/authorized_keys
+# ssh gp7s1.local

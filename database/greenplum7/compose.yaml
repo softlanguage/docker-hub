@@ -1,5 +1,6 @@
 # docker compose -p gpdb7 -f compose.yaml up -d
 # docker compose -p gpdb7 down
+# docker compose -f compose.yaml build
 networks:
   default:
     name: apps
@@ -22,12 +23,14 @@ services:
       - "gp7m1.local:127.0.0.1"
       - "gp7s1.local:127.0.0.1"
       - "gp7s2.local:127.0.0.1"
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 6g
-    working_dir: /mpp
+    #cpus: '2'
+    cpuset: '0-1'
+    mem_limit: 4gb
+    memswap_limit: 4gb
+    shm_size: 1gb
     volumes:
       - ./mpp/dist:/mpp/dist
+      - ./mpp/pyops:/mpp/gpadmin/pyops
+      - ./mpp/conf.d:/mpp/gpadmin/conf.d
+    working_dir: /mpp
     command: /usr/sbin/sshd  -D -p22

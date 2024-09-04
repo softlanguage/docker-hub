@@ -117,9 +117,9 @@ def run_maintain(dbname: str, conn_pool):
 
 def main():
     """The main function."""
-    for db in ['postgres', 'dw01', 'wbdata']:
+    for db in ['postgres', 'uat_sell']:
         with pool.ConnectionPool(
-            conninfo=f"postgresql://gpadmin@localhost:5677/{db}?application_name=doctor",
+            conninfo=f"postgresql://gpadmin@127.0.0.1:5677/{db}?application_name=doctor",
             min_size=0,
             max_size=2,
             timeout=5,

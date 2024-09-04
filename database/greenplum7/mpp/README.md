@@ -1,4 +1,15 @@
-- optimize
+- devops
+```sql
+-- gpstart -m # Starts the coordinator instance only, only allows connections to the coordinator in utility mode 
+-- PGOPTIONS='-c gp_role=utility' psql
+-- show config of segments --
+select * from gp_segment_configuration;
+-- set allow_system_table_mods=1;
+-- reset allow_system_table_mods;
+-- change port=5677 in postgresql.conf@master and Restart GP
+UPDATE gp_segment_configuration SET port=5677 WHERE content=-1 and port=5432;
+```
+
 ```sh
 # pip install psycopg
 python3.11 -m ensurepip
