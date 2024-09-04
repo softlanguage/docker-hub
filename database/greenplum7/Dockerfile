@@ -1,3 +1,4 @@
+#from docker.io/oraclelinux:8
 from q3.x-b.ltd:85/library/oraclelinux:8
 WORKDIR /mpp
 ADD ./mpp/greenplum*.rpm /tmp

@@ -1,4 +1,6 @@
 - devops
+- Change Owner: `chown -R 5432:5432 ./mpp`
+
 ```sql
 -- gpstart -m # Starts the coordinator instance only, only allows connections to the coordinator in utility mode 
 -- PGOPTIONS='-c gp_role=utility' psql
