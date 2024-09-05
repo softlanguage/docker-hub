@@ -1,2 +1,2 @@
-*
+mpp/dist/*
 !mpp/greenplum-db-*.rpm

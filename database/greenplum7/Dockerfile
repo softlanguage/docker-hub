@@ -1,6 +1,10 @@
-#from docker.io/oraclelinux:8
-from q3.x-b.ltd:85/library/oraclelinux:8
+from docker.io/oraclelinux:8
+#from q3.x-b.ltd:85/library/oraclelinux:8
 WORKDIR /mpp
+RUN mkdir /mpp/bear
+ADD Dockerfile compose.yaml start.sh  /mpp/bear/
+ADD mpp/conf.d mpp/pyops mpp/README.md /mpp/bear/
+
 ADD ./mpp/greenplum*.rpm /tmp
 
 RUN dnf update && dnf install -y hostname wget lsof telnet glibc-locale-source &&\
