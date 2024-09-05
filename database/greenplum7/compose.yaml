@@ -26,7 +26,8 @@ services:
     #cpus: '2'
     cpuset: '0-1'
     mem_limit: 4gb
-    memswap_limit: 4gb
+    memswap_limit: 0 # will use less memory as buff/cache
+    #memswap_limit: 4gb # 
     shm_size: 1gb
     volumes:
       - ./mpp/dist:/mpp/dist
