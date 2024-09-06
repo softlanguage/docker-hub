@@ -23,10 +23,10 @@ services:
       - "gp7m1.local:127.0.0.1"
       - "gp7s1.local:127.0.0.1"
       - "gp7s2.local:127.0.0.1"
-    #cpus: '2'
+    #cpus: 2.0
     cpuset: '0-1'
     mem_limit: 4gb
-    memswap_limit: 0 # will use less memory as buff/cache
+    memswap_limit: -1 # will use less memory as buff/cache
     #memswap_limit: 4gb # 
     shm_size: 1gb
     volumes:
