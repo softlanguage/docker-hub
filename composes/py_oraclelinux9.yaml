@@ -16,11 +16,11 @@ services:
     environment:
        - TZ=Asia/Shanghai
     network_mode: host
-    deploy:
-      resources:
-        limits:
-          cpus: 3
-          memory: 4g
+    #cpus: 2.0
+    cpuset: '0-1'
+    mem_limit: 4gb
+    memswap_limit: -1
+    shm_size: 1gb
     volumes:
       - pyarn-root:/root
       - pyarn-home:/home

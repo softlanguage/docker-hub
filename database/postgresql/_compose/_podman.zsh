@@ -11,7 +11,7 @@ img_tag=docker.io/softlang/citus-cn:11.3-pg13fdw
 
 podman rm -i -t 15 -f $mybox
 
-podman run -itd --name $mybox -h $mybox --cpus '2' -m 15g \
+podman run -itd --name $mybox -h $mybox --cpus '2' -m 15g --memory-swap=-1 \
 	--tz Asia/Shanghai --network host --restart always --init \
 	-e POSTGRES_PASSWORD=123654 -e PGPORT=5430 \
 	--tmpfs /dev/shm --no-healthcheck \

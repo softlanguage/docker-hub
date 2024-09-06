@@ -37,8 +37,8 @@ services:
     ports:
       - 6432:5432
     restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2048M
+    #cpus: 2.0
+    cpuset: '0-1'
+    mem_limit: 2gb
+    memswap_limit: -1
+    shm_size: 1gb
