@@ -33,7 +33,7 @@ services:
       - ./data:/var/lib/postgresql/data
       - target: /dev/shm
         type: tmpfs
-    #network_mode: host
+    #network_mode: bridge/host
     ports:
       - 6432:5432
     restart: always

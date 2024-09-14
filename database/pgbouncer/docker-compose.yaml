@@ -19,7 +19,7 @@ services:
        - POOL_MODE=transaction
        - ADMIN_USERS=postgres,dev
        # - DB_NAME=test
-    # network_mode: host
+    # network_mode: bridge
     ports:
       - "6432:6432"
     #cpus: 2.0

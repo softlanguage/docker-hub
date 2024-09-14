@@ -24,7 +24,7 @@ services:
             exec /usr/bin/clickhouse su "clickhouse:clickhouse" /usr/bin/clickhouse-server --config-file=$$CLICKHOUSE_CONFIG
             '
     restart: always
-    #network_mode: host
+    #network_mode: bridge/host
     environment:
       - TZ=Asia/Shanghai
     ports:

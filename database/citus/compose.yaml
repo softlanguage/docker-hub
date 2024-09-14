@@ -16,7 +16,7 @@ services:
       - "./data:/var/lib/postgresql/data:rw"
       - target: /dev/shm
         type: tmpfs
-    network_mode: host
+    network_mode: bridge
     ports:
       - 5432:5432
     restart: always

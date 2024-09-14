@@ -13,6 +13,7 @@ services:
     container_name: ci-devops-jenkins
     hostname: ci-devops-jenkins
     user: jenkins
+    #network_mode: bridge # host
     ports:
       - mode: host
         published: 8080
