@@ -2,7 +2,7 @@
 FROM docker.io/python:3.10-slim-bullseye
 ARG uhome=/siri
 WORKDIR $uhome/app
-RUN useradd -d $uhome -s /bin/sh -u 8681 siri && chown -R siri:siri $uhome
+RUN useradd -d $uhome -s /bin/sh -u 5001 siri && chown -R siri:siri $uhome
 USER siri
 # COPY --from=build /app/requirements.txt requirements.txt
 # may need http_proxy by squid
