@@ -1,10 +1,6 @@
 # docker compose -p gpdb7 -f compose.yaml up -d
 # docker compose -p gpdb7 down
 # docker compose -f compose.yaml build
-networks:
-  default:
-    name: apps
-    external: true
 services:
   gpdb7rhel8:
     #image: docker.io/oraclelinux:8
@@ -17,6 +13,7 @@ services:
     restart: always
     environment:
        - TZ=Asia/Shanghai
+    network_mode: bridge
     ports:
       - 5677:5677
     extra_hosts:
@@ -35,3 +32,7 @@ services:
       - ./mpp/conf.d:/mpp/gpadmin/conf.d
     working_dir: /mpp
     command: /usr/sbin/sshd  -D -p22
+#networks:
+#  default:
+#    name: apps
+#    external: true
