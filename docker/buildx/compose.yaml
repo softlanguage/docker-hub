@@ -1,0 +1,29 @@
+# docker pull haproxy:lts-alpine
+# docker stack deploy -c ns_dev_whoami.yaml ns_dev
+version: '3.7'
+networks:
+  default:
+    name: ns_dev
+    external: true
+
+services:
+  whoami:
+    image: docker.io/httpd:alpine3.18
+    hostname: 'whoami'
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 64M
+  demo:
+    image: docker.io/httpd:alpine3.18
+    hostname: 'demo'
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 64M
