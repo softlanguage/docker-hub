@@ -3,14 +3,19 @@
 FROM jenkins/jenkins:2.414.3-lts-slim
 
 USER root
-ARG docker_cli_url=https://download.docker.com/linux/debian/dists/bookworm/pool/stable/amd64/docker-ce-cli_24.0.9-1~debian.12~bookworm_amd64.deb
+arg dists_url=https://download.docker.com/linux/debian/dists/bookworm/pool/stable/amd64
+ARG docker_cli_url=${dists_url}/docker-ce-cli_24.0.9-1~debian.12~bookworm_amd64.deb
 ARG docker_cli_deb=/tmp/docker-ce-cli_24.0.9.deb
 
+ARG buildx_cli_url=${dists_url}/docker-buildx-plugin_0.16.2-1~debian.12~bookworm_amd64.deb
+ARG buildx_cli_deb=/tmp/docker-buildx-plugin_0.16.2-1.deb
+
 ADD $docker_cli_url $docker_cli_deb
+ADD $buildx_cli_url $buildx_cli_deb
 
 RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g'  /etc/apt/sources.list.d/debian.sources \
-    && apt update && apt install -y tree python3 $docker_cli_deb \
-    && rm -rf /var/cache/apk/* && rm -rf $docker_cli_deb
+    && apt update && apt install -y tree python3 $docker_cli_deb $buildx_cli_deb \
+    && rm -rf /var/cache/apk/* && rm -rf /tmp/*
 
 USER jenkins
 ENV TZ=Asia/Shanghai
