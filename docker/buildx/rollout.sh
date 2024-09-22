@@ -14,6 +14,7 @@ IMAGE_NAME="img.local/${JOB_NAME:-dev/demo}:$BUILD_NUMBER"
 
 dockerman pull docker.io/python:3.10-slim-bullseye
 
+# apt install docker-buildx on jenkins and pod01.dev@remote
 dockerman build --cpuset-cpus=0 -m 2g --force-rm --network host \
   -t $IMAGE_NAME -f $cwd/../npm/Dockerfile $git_repository
 
