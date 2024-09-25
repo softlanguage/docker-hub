@@ -1,5 +1,7 @@
 # docker pull haproxy:lts-alpine
 # docker stack deploy -c compose.yaml ns_dev
+# docs: https://github.com/docker/compose/tree/v1/docs
+# https://github.com/docker/compose/blob/v1/docs/Compose%20file%20reference%20(legacy)/version-3.md
 version: '3.7'
 networks:
   default:
@@ -18,9 +20,15 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-        delay: 20s
-        #failure_action: rollback
+        delay: 5s
+        #monitor: 300s \
         #order: start-first # default=stop-first
+        #failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        #max_attempts: 3
+        #window: 120s
       resources:
         limits:
           cpus: '1'
