@@ -29,14 +29,16 @@ RUN printf '\
 #<id>maven</id><host>192.168.0.8</host><port>8888</port>\n\
 #</proxy></proxies>\n\
 
-RUN ls -la ~/ && cat ~/m2.xml
+# config maven run with proxy and settings in m2.xml 
+ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=v2ray.tinyproxy -Dhttp.proxyPort=8888"
+RUN alias m2="mvn $M2PROXY -s ~/m2.xml -f pom.xml"
 
 COPY pom.xml .
-RUN mvn dependency:go-offline -q -s ~/m2.xml -f pom.xml
+RUN m2 dependency:go-offline -q
 
 COPY . .
 # mvn clean package -s ~/m2_settings.xml -q -Dmaven.test.skip=true -f pom.xmls
-RUN mvn clean package -s ~/m2.xml -Dmaven.test.skip=true -f pom.xml 
+RUN m2 clean package -Dmaven.test.skip=true
 RUN ls -lha target && mv $(realpath target/*.jar) target/app.jar && ls -lha target
 
 # ----- runtime
@@ -50,10 +52,11 @@ COPY --from=builder $uhome/app/target/app.jar .
 RUN pwd && ls -lha
 
 # environment
-ARG profile=dev
+ARG app_profile=dev
 ARG app_path=/api-crmls
-ENV JAR_OPTIONS="-Dserver.port=5000 -Dserver.servlet.context-path=${app_path}"
-ENV JAR_PROFILE="-Dspring.profiles.active=${profile}"
+ARG app_port=5000
+ENV JAR_OPTIONS="-Dserver.port=${app_port} -Dserver.servlet.context-path=${app_path}"
+ENV JAR_PROFILE="-Dspring.profiles.active=${app_profile}"
 ENV JAVA_OPS="-Xms512m -Xmx512m"
 
 CMD java $JAVA_OPS $JAR_PROFILE $JAR_OPTIONS -jar app.jar
