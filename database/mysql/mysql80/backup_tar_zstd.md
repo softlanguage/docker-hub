@@ -16,5 +16,5 @@ tar -I zstd -cf ./log.zstd.tar -C /var ./log
 
 # tar decompress with zstd
 tar -I zstd -xf ./log.zstd.tar
-
+echo "--> zstd -d -c ./log.zstd.tar | tar xf - #PWD‼️"
 ```
