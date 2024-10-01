@@ -1,4 +1,4 @@
-# docker -c=pod01.dev [OPTIONS] PATH | URL | -
+# docker -c=pod01.dev -t hub.lan/app:j17 -f Dockerfile [OPTIONS] PATH | - | URL
 # tar czf ./demo.tar --exclude=crmls-ai/target crmls-ai/
 # java 17-lts
 FROM docker.io/maven:3.8.5-eclipse-temurin-17 AS builder
@@ -33,10 +33,10 @@ RUN printf '\
 ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=v2ray.tinyproxy -Dhttp.proxyPort=8888"
 RUN alias m2="mvn $M2PROXY -s ~/m2.xml -f pom.xml"
 
-COPY pom.xml .
+COPY --chown=siri:siri pom.xml .
 RUN m2 dependency:go-offline -q
 
-COPY . .
+COPY --chown=siri:siri . .
 # mvn clean package -s ~/m2_settings.xml -q -Dmaven.test.skip=true -f pom.xmls
 RUN m2 clean package -Dmaven.test.skip=true
 RUN ls -lha target && mv $(realpath target/*.jar) target/app.jar && ls -lha target
