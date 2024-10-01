@@ -5,10 +5,9 @@ ARG uhome=/siri
 WORKDIR $uhome/app
 RUN useradd -d $uhome -s /bin/sh -u 5001 siri && chown -R siri:siri $uhome
 USER siri
-ARG http_proxy=http://172.31.240.97:8888
-ARG https_proxy=http://172.31.240.97:8888
+# ARG http_proxy=http://tinyproxy:8888
+# ARG https_proxy=http://tinyproxy:8888
 RUN npm config set registry https://registry.npmmirror.com
-#RUN mkdir ./{uimp,uipc}
 
 # prepare for install
 COPY --chown=siri:siri uimp/package*.json ./uimp/

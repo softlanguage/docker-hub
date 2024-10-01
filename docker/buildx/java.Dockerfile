@@ -23,14 +23,8 @@ RUN printf '\
     </mirrors>\n\
 </settings>\n\
 ' > ~/m2.xml
-# maven proxy, does not support ENV.http_proxy
-#<proxies><proxy>\n\
-#<protocol>http</protocol><active>true</active>\n\
-#<id>maven</id><host>192.168.0.8</host><port>8888</port>\n\
-#</proxy></proxies>\n\
-
 # config maven run with proxy and settings in m2.xml 
-ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=v2ray.tinyproxy -Dhttp.proxyPort=8888"
+# ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=v2ray.tinyproxy -Dhttp.proxyPort=8888"
 RUN alias m2="mvn $M2PROXY -s ~/m2.xml -f pom.xml"
 
 COPY --chown=siri:siri pom.xml .
