@@ -1,0 +1,22 @@
+
+
+```sh
+mvn clean package
+```
+
+
+```sql
+-- Create the book table
+CREATE TABLE book (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    publication_year INT
+);
+
+-- Insert some sample data
+INSERT INTO book (title, author, publication_year) VALUES
+('The Great Gatsby', 'F. Scott Fitzgerald', 1925),
+('To Kill a Mockingbird', 'Harper Lee', 1960),
+('1984', 'George Orwell', 1949);
+```
