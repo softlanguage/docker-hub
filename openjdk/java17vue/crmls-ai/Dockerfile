@@ -1,4 +1,4 @@
-# docker -c=pod01.dev build -t hub.lan/app:j17 -f Dockerfile [OPTIONS] PATH | - | URL
+# docker -c=pod01.dev [OPTIONS] PATH | URL | -
 # tar czf ./demo.tar --exclude=crmls-ai/target crmls-ai/
 # java 17-lts
 FROM docker.io/maven:3.8.5-eclipse-temurin-17 AS builder
@@ -23,14 +23,13 @@ RUN printf '\
     </mirrors>\n\
 </settings>\n\
 ' > ~/m2.xml
-# config maven run with proxy and settings in m2.xml 
-# ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=v2ray.tinyproxy -Dhttp.proxyPort=8888"
-ARG M2="mvn $M2PROXY -s ~/m2.xml -f pom.xml"
 
-COPY --chown=siri:siri pom.xml .
+# ARG M2PROXY="-DproxySet=true -Dhttp.proxyHost=tinyproxy -Dhttp.proxyPort=8888"
+ARG M2="mvn $M2PROXY -s ~/m2.xml -f pom.xml"
+COPY pom.xml .
 RUN sh -ec "$M2 dependency:go-offline -q"
 
-COPY --chown=siri:siri . .
+COPY . .
 # mvn clean package -s ~/m2_settings.xml -q -Dmaven.test.skip=true -f pom.xmls
 RUN sh -ec "$M2 clean package -Dmaven.test.skip=true -q"
 RUN ls -lha target && mv $(realpath target/*.jar) target/app.jar && ls -lha target
@@ -46,11 +45,10 @@ COPY --from=builder $uhome/app/target/app.jar .
 RUN pwd && ls -lha
 
 # environment
-ARG app_profile=dev
+ARG profile=dev
 ARG app_path=/api-crmls
-ARG app_port=5000
-ENV JAR_OPTIONS="-Dserver.port=${app_port} -Dserver.servlet.context-path=${app_path}"
-ENV JAR_PROFILE="-Dspring.profiles.active=${app_profile}"
+ENV JAR_OPTIONS="-Dserver.port=5000 -Dserver.servlet.context-path=${app_path}"
+ENV JAR_PROFILE="-Dspring.profiles.active=${profile}"
 ENV JAVA_OPS="-Xms512m -Xmx512m"
 
 CMD java $JAVA_OPS $JAR_PROFILE $JAR_OPTIONS -jar app.jar
