@@ -12,11 +12,13 @@ BUILD_TAG=${BUILD_TAG:-"dev-demo-$BUILD_NUMBER"}
 BUILD_TAG=$(echo "$BUILD_TAG" | sed 's/^jenkins-//')
 IMAGE_NAME="img.local/${JOB_NAME:-dev/demo}:$BUILD_NUMBER"
 
-dockerman pull docker.io/python:3.10-slim-bullseye
+#dockerman pull docker.io/python:3.10-slim-bullseye
+dockerman pull docker.io/eclipse-temurin:17-jre-focal
+dockerman pull docker.io/maven:3.8.5-eclipse-temurin-17
 
 # apt install docker-buildx on jenkins and pod01.dev@remote
 dockerman build --cpuset-cpus=0 -m 2g --force-rm --network host \
-  -t $IMAGE_NAME -f $cwd/../npm/Dockerfile $git_repository
+  -t $IMAGE_NAME -f $cwd/java.Dockerfile $git_repository
 
 dockerman image ls $IMAGE_NAME
 

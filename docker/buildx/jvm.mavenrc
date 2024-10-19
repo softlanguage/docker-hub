@@ -1,0 +1,9 @@
+# $HOME/.mavenrc, ~/.mavenrc
+export JAVA_HOME="/usr/local/opt/openjdk@17"
+export MAVEN_OPTS="-Xmx1024m -Djava.awt.headless=true"
+# -Xms256m; * java.awt.headless=true, 
+# Java will use alternative implementations for graphical operations that don't require a physical display. 
+
+# >> Install openjdk and maven on macOS:
+# brew install openjdk@17
+# brew install --ignore-dependencies maven

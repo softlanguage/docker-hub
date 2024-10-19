@@ -31,7 +31,7 @@ ARG http_proxy
 ARG https_proxy
 
 # prepare for install
-COPY --chown=siri:siri uimp/package*.json .
+COPY --chown=siri:siri uipc/package*.json .
 RUN npm install --quiet
 
 COPY --chown=siri:siri uipc/ .
