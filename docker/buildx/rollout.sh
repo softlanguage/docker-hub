@@ -25,6 +25,10 @@ dockerman image ls $IMAGE_NAME
 BUILD_TAG=$BUILD_TAG IMAGE_NAME=$IMAGE_NAME \
 dockerman stack deploy -c $cwd/compose.yaml ns_dev
 
+# 9 0 * * * sh -ec 'docker image prune --filter until=288h -fa' 2>&1 | tee -a /tmp/cron_cleanup_images.log
+# cleanup images: --filter label=app_tag=$IMAGE_NAME --filter until=72h
+docker image prune --filter until=72h -fa # 288h=12days
+
 # inline compose:
 <<///compose
 version: '3.7'
