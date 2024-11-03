@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=easyMonitor
+Comment=
+Exec=./EasyMonitor restart
+Icon=
+Path=/usr/share/sangfor/EasyConnect/resources/bin/
+Terminal=false
+StartupNotify=false
