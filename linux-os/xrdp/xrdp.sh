@@ -7,7 +7,7 @@ app_image=softlang/ubuntu:18.04-xrdp-xfce
 #app_image=danielguerra/ubuntu-xrdp:18.04
 #app_image=danielguerra/ubuntu-xrdp:20.04
 pod_opts="-m=2g --memory-swap=-1 --ip=192.168.100.201 --network=apps"
-# --privileged -w /app
+# --privileged **** enable privileged IF you want establish VPN like EashConnect 
 docker run -d --name $app_name -h $app_name $pod_opts $app_image 
 <<'///'
 sh -ec '
