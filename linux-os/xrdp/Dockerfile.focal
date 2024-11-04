@@ -1,13 +1,11 @@
 # docker build --force-rm -m 2g -t softlang/ubuntu:focal-xrdp-xfce .
 FROM ubuntu:focal
 ARG DEBIAN_FRONTEND=noninteractive
-# xubuntu-desktop , or xfce4
+    #nginx libnginx-mod-stream \
 RUN apt update && apt upgrade -yy && apt install -y --no-install-recommends \
-    xubuntu-desktop xrdp \
-    supervisor \
-    lsof telnet micro \
-    xfce4-terminal xorgxrdp xauth dbus-x11 terminator \
-    nginx libnginx-mod-stream \
+    xfce4 xrdp xfce4-terminal xorgxrdp xauth dbus-x11 terminator \
+    supervisor wget lsof telnet micro locales \
+    && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
     && apt-get remove -yy xscreensaver \
     && apt autoremove -yy \
     && rm -rf /var/cache/apt /var/lib/apt/lists
