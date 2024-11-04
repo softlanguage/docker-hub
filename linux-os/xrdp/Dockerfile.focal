@@ -1,0 +1,17 @@
+# docker build --force-rm -m 2g -t softlang/ubuntu:focal-xrdp-xfce .
+FROM ubuntu:focal
+ARG DEBIAN_FRONTEND=noninteractive
+# xubuntu-desktop , or xfce4
+RUN apt update && apt upgrade -yy && apt install -y --no-install-recommends \
+    xubuntu-desktop xrdp \
+    supervisor \
+    lsof telnet micro \
+    xfce4-terminal xorgxrdp xauth dbus-x11 terminator \
+    nginx libnginx-mod-stream \
+    && apt-get remove -yy xscreensaver \
+    && apt autoremove -yy \
+    && rm -rf /var/cache/apt /var/lib/apt/lists
+
+COPY supervisor.d/* /etc/supervisor/conf.d/
+
+CMD /usr/bin/printf '\n** xrdp-user need password **\n\n' && exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
