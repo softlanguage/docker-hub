@@ -1,10 +1,12 @@
 #### maven reposilite
-> https://reposilite.com/guide/jar
-- reposilite cli for config
 > https://reposilite.com/
-> https://v2.reposilite.com/docs/authorization
+> https://v2.reposilite.com/
 
 ```sh
+# how to test
+mvn dependency:go-offline -s ~/new_reposi.xml -f pom.xml
+mvn -s ~/new_reposi.xml dependency:get -Dartifact=com.common.utils:common-utils:2.3.9
+
 # ---- https://reposilite.com/guide/jar -----
 # 1. download
 wget -c https://repo.panda-lang.org/releases/org/panda-lang/reposilite/2.9.26/reposilite-2.9.26.jar
@@ -15,10 +17,9 @@ java -Xmx32M -jar reposilite.jar
 # see the parameters
 java -jar reposilite.jar --help
 
-# use the not userd port=8089 
-java -Xmx32M -Dreposilite.port=8089 -jar reposilite.jar --working-directory=/app/data
-# workdir=/app, use -wd=data, write log to console
-java -Xmx32M -Dtinylog.writerFile.file=/dev/stdout -jar reposilite.jar -wd=data 
+#  write log to console, listen on port=8089, --working-directory | -wd=data
+java -Xmx32M -Dreposilite.port=8089 -Dtinylog.writerFile.file=/dev/stdout \
+  -jar reposilite.jar --working-directory=/app/data
 
 # cli in reposilite
 help keygen # see the keygen parameters
@@ -27,8 +28,7 @@ keygen / devops wr # write and read
 keygen / developer r # readonly
 keygen / developer r # to renew token for user-dev
 
-stop
-
+stop # to stop
 # upstream public repository
 grep -i ./reposilite.cdn 
 <<...reposilite.cdn
@@ -36,9 +36,6 @@ proxied [
   https://maven.aliyun.com/repository/public
 ]
 ...reposilite.cdn
-
-# to test
-mvn dependency:go-offline -s ~/mvn_setttings.xml -f pom.xml
 ```
 
 #### run by systemd
@@ -220,8 +217,5 @@ mvn dependency:tree
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.7</version>
     </parent>
-
-    <!-- Additional lines to be added here... -->
-
 </project>
 ```
