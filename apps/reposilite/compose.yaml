@@ -29,5 +29,6 @@ services:
       - -t=dev:your-token-xxx
 
 # test
-# docker run --rm -itd -m 1g --name test-maven maven:3.8.5-eclipse-temurin-17
-# mvn -s ~/new_reposi.xml dependency:get -Dartifact=com.common.utils:common-utils:2.3.9
+# docker run --rm -itd -m 1g --name test-maven maven:3.8.5-eclipse-temurin-17 sh
+# mvn -s ~/settings.xml dependency:go-offline
+# mvn -s ~/settings.xml dependency:get -Dartifact=com.common.utils:common-utils:2.3.9
