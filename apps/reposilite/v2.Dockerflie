@@ -1,0 +1,17 @@
+# docker build -t softlang/maven:reposilite2-java11 -f Dockerfile [OPTIONS] PATH | - | URL
+# tar czf ./demo.tar --exclude=crmls-ai/target crmls-ai/
+# java 17-lts
+FROM docker.io/maven:3.8.5-eclipse-temurin-17 AS builder
+ARG uhome=/siri
+WORKDIR $uhome/app
+RUN useradd -d $uhome -s /bin/sh -u 1000 siri && chown -R siri:siri $uhome
+USER siri
+
+ARG jar01=https://repo.panda-lang.org/releases/org/panda-lang/reposilite/2.9.26/reposilite-2.9.26.jar
+ADD --chown=siri:siri jar01 ./v2reposilite.jar
+
+ENV REPO_PORT=8089
+ENV REPO_PROXIED=https://maven.aliyun.com/repository/public
+# -Dreposilite.proxied=https://maven.aliyun.com/repository/public -Dreposilite.port=8089
+CMD sh -ec "java -Xmx64M -Dtinylog.writerFile.file=/dev/stdout -Dreposilite.port=${REPO_PORT} -Dreposilite.proxied=${REPO_PROXIED} -jar ./v2reposilite.jar -wd=./data"
+# java -Xmx64M -Dreposilite.port=8089 -Dreposilite.proxied=https://maven.aliyun.com/repository/public -jar reposilite-2.9.26.jar
