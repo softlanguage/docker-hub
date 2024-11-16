@@ -1,5 +1,6 @@
 # docker build -t softlang/maven:reposilite2-java17 -f Dockerfile .
 # docker run -d --name v2reposilite -m 1g -p 80:8080 softlang/maven:reposilite2-java17
+# https://hub.docker.com/r/softlang/maven
 FROM docker.io/maven:3.8.5-eclipse-temurin-17 AS builder
 ARG uhome=/siri
 WORKDIR $uhome/app

@@ -1,3 +1,4 @@
+# https://hub.docker.com/r/softlang/maven
 # docker compose -p host-mvn -f compose.yaml up -d
 # docker compose -p host-mvn down
 services:
@@ -7,25 +8,27 @@ services:
     container_name: maven-reposilite.dev
     environment:
       - TZ=Asia/Shanghai
+      - REPO_PORT=5050
+      - REPO_PROXIED=https://maven.aliyun.com/repository/public
     network_mode: host
-    #user: "1000:1000"
     volumes:
       - ./data:/siri/app/data
+      - ./demo:/siri/app/demo
     restart: always
     mem_limit: 512M
     memswap_limit: -1
-    #shm_size: 1gb
     cpuset: '0'
-    command:
-      - exec
-      - java
-      - -Dtinylog.writerFile.file=/dev/stdout
-      - -Dreposilite.proxied=https://maven.aliyun.com/repository/public
-      - -Dreposilite.port=8080
-      - -Xmx64M
-      - -jar
-      - v2reposilite.jar
-      - -wd=data
+
+#    command:
+#      - exec
+#      - java
+#      - -Dtinylog.writerFile.file=/dev/stdout
+#      - -Dreposilite.proxied=https://maven.aliyun.com/repository/public
+#      - -Dreposilite.port=8080
+#      - -Xmx64M
+#      - -jar
+#      - v2reposilite.jar
+#      - -wd=data
 # test
 # mvn -s ~/settings.xml dependency:go-offline -f pom.xml
 # mvn -s ~/settings.xml dependency:get -Dartifact=com.common.utils:common-utils:2.3.9
