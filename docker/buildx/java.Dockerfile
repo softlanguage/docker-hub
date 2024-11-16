@@ -53,7 +53,9 @@ ENV JAR_OPTIONS="-Dserver.port=${app_port} -Dserver.servlet.context-path=${app_p
 ENV JAR_PROFILE="-Dspring.profiles.active=${app_profile}"
 ENV JAVA_OPS="-Xms256m -Xmx512m"
 
+# CMD exec java $JAVA_OPS $JAR_PROFILE $JAR_OPTIONS -jar app.jar
 CMD java $JAVA_OPS $JAR_PROFILE $JAR_OPTIONS -jar app.jar
+
 # CMD ["java", "-jar", "app.jar"]
 # for java 17 jre 
 # java -Dspring.profiles.active=dev -Dserver.servlet.context-path=/api-crmls -Dserver.port=5000 -jar app.jar
