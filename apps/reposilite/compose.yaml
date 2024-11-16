@@ -24,7 +24,7 @@ services:
       - -Dreposilite.port=8080
       - -Xmx64M
       - -jar
-      - /app/reposilite-3.5.18-all.jar
+      - v2reposilite.jar
       - -wd=data
 # test
 # mvn -s ~/settings.xml dependency:go-offline -f pom.xml
