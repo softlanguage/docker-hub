@@ -4,11 +4,15 @@
 # python3.11 -m pip install psycopg[binary,pool] -i http://mirrors.cloud.aliyuncs.com/pypi/simple/ --trusted-host mirrors.cloud.aliyuncs.com
 # import psycopg
 import psycopg_pool as pool
+import psycopg
 import datetime
+
 """
 pypy -m pip install psycopg[binary,pool] # v3
 `with conn_pool.connection() as conn:`
 """
+
+
 # import pandas as pd
 # VACUUM ANALYZE
 def run_vacuum_analyse(conn_pool):
@@ -69,15 +73,20 @@ def run_vacuum(conn_pool, table_name):
         --set autocommit off;
     """
 
-    with conn_pool.connection() as conn:
-        with conn.cursor() as curs:
-            conn.autocommit = True
-            logger(conn.autocommit)
-            curs.execute(query)
+    try:
+        with conn_pool.connection() as conn:
+            with conn.cursor() as curs:
+                conn.autocommit = True
+                logger(conn.autocommit)
+                curs.execute(query)
+    except psycopg.errors.LockNotAvailable:
+        logger(f"Lock timeout:  {table_name}, do next..")
+    except Exception as e:
+        logger(f"An error occurred: {str(e)}")
 
 
 def check_statement_timeout(conn_pool):
-    query = f'show statement_timeout;SELECT 1; SELECT 2;'
+    query = f"show statement_timeout;SELECT 1; SELECT 2;"
     with conn_pool.connection() as conn:
         logger(conn.autocommit)
         with conn.cursor() as curs:
@@ -88,17 +97,17 @@ def check_statement_timeout(conn_pool):
 
 def logger(*msg):
     logs = [str(s) for s in msg]
-    print(f'{datetime.datetime.now()}>>', ' '.join(logs), flush=True)
+    print(f"{datetime.datetime.now()}>>", " ".join(logs), flush=True)
 
 
 def run_maintain(dbname: str, conn_pool):
-    logger('---> run for ', dbname)
+    logger("---> run for ", dbname)
     for i in range(0, 1):
         check_statement_timeout(conn_pool)
     logger(conn_pool.get_stats())
 
     # VACUUM ANALYZE, already vaccumed on backup
-    #run_vacuum_analyse(conn_pool)
+    # run_vacuum_analyse(conn_pool)
 
     gp_diag_tables = get_gp_bloat_diag(conn_pool)
     for table_name in gp_diag_tables:
@@ -112,19 +121,19 @@ def run_maintain(dbname: str, conn_pool):
         run_vacuum(conn_pool, table_name[0])
 
     conn_pool.close()
-    logger('>> finish to vacuum bloated tables on', dbname)
+    logger(">> finish to vacuum bloated tables on", dbname)
 
 
 def main():
     """The main function."""
-    for db in ['postgres', 'uat_sell']:
+    for db in ["postgres", "uat_sell"]:
         with pool.ConnectionPool(
             conninfo=f"postgresql://gpadmin@127.0.0.1:5677/{db}?application_name=doctor",
             min_size=0,
             max_size=2,
             timeout=5,
-            kwargs={
-                'options': '-c statement_timeout=7200000'}
+            kwargs={"options": "-c lock_timeout=5000 -c statement_timeout=7200000"},
+            # with 5 Seconds for lock table
         ) as conn_pool:
             run_maintain(db, conn_pool)
 
