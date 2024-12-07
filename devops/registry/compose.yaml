@@ -14,7 +14,7 @@ services:
     network_mode: bridge # host
     ports:
       - 5005:5005
-    cpus: 1.0
+    cpu_count: 1
     #cpuset: '0-1'
     mem_limit: 512mb
     memswap_limit: -1

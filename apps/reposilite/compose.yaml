@@ -18,6 +18,7 @@ services:
     mem_limit: 512M
     memswap_limit: -1
     cpuset: '0'
+    #cpu_count: 2
 
 #    command:
 #      - exec

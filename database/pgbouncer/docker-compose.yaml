@@ -22,7 +22,7 @@ services:
     # network_mode: bridge
     ports:
       - "6432:6432"
-    #cpus: 2.0
+    #cpu_count: 2
     cpuset: '0-1'
     mem_limit: 1gb
     memswap_limit: -1

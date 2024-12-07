@@ -16,7 +16,7 @@ services:
     environment:
        - TZ=Asia/Shanghai
     network_mode: host
-    #cpus: 2.0
+    #cpu_count: 2
     cpuset: '0-1'
     mem_limit: 4gb
     memswap_limit: -1
