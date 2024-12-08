@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#!python3
 """
 python3 or pypy3.10
 --dry-run, only print args and command
@@ -9,8 +12,8 @@ python3 or pypy3.10
 -s, --subject="CronJob - Demo"
 -c, --command='sh -c "echo 123;sleep 2;echo abc"'
 
-cron_mail.py -c='sh -c "echo abc123"' -s'Test Job' --dry-run
-cron_mail.py -t=bug.fyi@foxmail.com -u=from@domain -Ppassword -c'sh ./script.sh' -s'subject'
+RunAndPost.py -c='sh -c "echo abc123"' -s'Test Job' --dry-run
+RunAndPost.py -t=bug.fyi@foxmail.com -u=from@domain -Ppassword -c'sh ./script.sh' -s'subject'
 """
 
 import shlex
