@@ -4,7 +4,18 @@
 
 ```sh
 (cmd111_will_error || echo "\n>>errord at $(date)\n") 2>&1 | tee -a /tmp/cron-test02.log
-(date || echo ">>errord at $(date)") 2>&1 | tee -a /tmp/cron-test03.log
+#15 2-22/2 * * * (date || echo ">>errord at $(date)") 2>&1 | tee -a /tmp/cron-test03.log
+
+# printf "\n-- backup by cron --\n"
+# if ! docker exec -i mysql-m25.prd bash -e < /mysql/backup.sh; then
+if ! docker exec -i mysql-m25.prd bash -e <<<"echo test;date"; then
+echo "prd-mysql-m25 backup failed"
+printf "Subject:[Failed] ssh-softyum-dev prd-mysql-m25 backup\n
+--- softyum devops ---
+ip = 10-10-10-22
+error = mysql backup failed 
+date = $(date)\n" | /usr/sbin/ssmtp -v bug.fyi@mail.local
+fi
 
 # check mysql-mdm-on-vpn
 if ! sh -ec 'mysqladmin ping -h mdm-mysql.dev -uReadonly -pPass'; then
@@ -12,17 +23,7 @@ echo "send mail to notice admin"
 echo 'mysql throuth VPN not available' | mail -s '[Failed] mysql.mdm check failed' bug.fyi@mail.local
 fi
 
-# run command on container
-if ! docker exec -i mysql-m25.prd bash -e <<<"echo test;date"; then
-echo "prd-mysql-m25 backup failed"
-printf "Subject: [Failed] yyy-dev prd-mysql-m25 backup
---- ssh yyy-dev ---
-ip = 10-10-10-1
-error = backup failed 
-date = $(date)" | /usr/sbin/ssmtp -v bug.fyi@mail.local
-fi
-
-# demos
+# demo
 echo -e 'Subject: test\n\nTesting ssmtp' | sendmail -v bug.fyi@mail.local
 echo -e "this is the mail body" | mail -s 'Subject of ssmtp' bug.fyi@mail.local
 
