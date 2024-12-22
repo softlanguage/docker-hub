@@ -111,22 +111,22 @@ def exec_job_command():
     except Exception as e:
         # the fetch will handle the error message
         logging.error(e)
-        result = "ERROR"
+        result = "ERROR."
     finally:
         proc.kill()
         return_code = proc.wait(5)
         logging.info(f"Kill code={return_code}")
-        result = "Success" if return_code == 0 else "Failed"
+        result += "Success" if return_code == 0 else "Failed"
         end_at = datetime.datetime.now().strftime(fmt_timestamp)
         logging.info(f"## {result} job at: {end_at}")
 
     print("\n-- send mail --\n", flush=True)
-    if ssmtp_to:
+    if ssmtp_to and result != "Success":
         send_email(
             ssmtp_to, f"[{result} {start_at}] - {ssmtp_subject}", log_buffer.getvalue()
         )
     else:
-        logging.info("skip: no recipient_email\n")
+        logging.info(f"skip for Result={result} and To={ssmtp_to}\n")
         print(log_buffer.getvalue(), flush=True)
 
 
