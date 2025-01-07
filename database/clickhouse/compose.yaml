@@ -11,7 +11,13 @@ networks:
 services:
   clickhouse-xlog: 
     # 23.3.10.5-lts
-    image: clickhouse/clickhouse-server:23.3.10.5
+    #image: clickhouse/clickhouse-server:23.3.10.5
+    #image: clickhouse:lts = v24.8 (20250107)
+    image: clickhouse:24.8
+    cap_add:
+      - SYS_NICE 
+      - NET_ADMIN 
+      - IPC_LOCK
     hostname: clickhouse-xlog
     container_name: clickhouse-xlog
     command: |
