@@ -5,6 +5,7 @@
 # archive
 archive_mode = 'on'
 archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'
+#psql -c "ALTER SYSTEM SET restore_command = 'gunzip -c /path/to/archive/%f.gz > %p';"
 ```
 
 - pg_basebackup
@@ -27,6 +28,8 @@ cat <<'EOF' >> postgresql.auto.conf
 restore_command = 'cp /var/lib/postgresql/backup/zstd_bak/archive_wal/pg_wal/%f %p'
 recovery_target_time = '2025-01-17 07:23:00 UTC' #  in UTC TimeZone
 #recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
+#restore_command = 'gunzip -c /path/to/archive/%f.gz > %p'
+#restore_command = 'zstd -d /path/to/archive/%f.zst -o %p'
 EOF
 
 # docker restart pg14 # will print logs as follows
