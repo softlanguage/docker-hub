@@ -65,3 +65,22 @@ sh -c 'pg_basebackup -v -c fast -Xf -U postgres -Ft -D- | zstd -c' > $bk_zstd
 echo "--> $(date '+%Y-%m-%d %H:%M:%S') finish pg_basebackup to $PWD/${bk_zstd}"
 echo "--> zstd -d -c $PWD/${bk_zstd} | tar xf - #PWD‼️"
 ```
+
+- cleanup arvhived WAL files by vacuum_wal.sh
+
+```sh
+# */20 * * * * flock -n /var/lock/cron_pg_vacuum_wal.lock -c 'sh -e /data/archived_wal/vacuum_wal.sh 2>&1 | tee -a /tmp/pg_archived_wal_prune.log'
+
+# 55 */2 * * *	sh -e /data/archived_wal/vacuum_wal.sh 2>&1 | tee -a /tmp/pg_archived_wal_prune.log
+set -e
+# goto WAL DIR as work_dir
+cd /data/archived_wal/wal_pg
+echo "---- $(date) ----"
+NAS_WAL=/mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal
+# compress and store info NAS, before 180mins from NOW
+find . -maxdepth 2 -name '*' -type f -mmin +180 -print -exec zstd -f --rm {} -o $NAS_WAL/{}.zst \;
+
+# cleanup old zst files, only keep 3days
+echo ">> cleanup wals in /mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal/*.zst"
+find $NAS_WAL/ -maxdepth 2 -name '*.zst' -type f -mtime +5 -print -exec rm -rf {} \;  && wait
+```
