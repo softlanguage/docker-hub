@@ -1,0 +1,64 @@
+
+- config in postgresql.auto.conf
+
+```conf
+# archive
+archive_mode = 'on'
+archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'
+```
+
+- pg_basebackup
+
+```sh
+# 25 23 * * * sh -ec 'cmd', base backup
+docker exec -it -upostgres pg-m1.dev bash /backup/zstd_bak/pg_clone.sh 2>&1 | tee -a /tmp/pg_basebackup_cron.log
+```
+
+- recovery to a target_time
+
+```sh
+# extra to $PWD, cd ~/data
+zstd -d -c /backup/zstd_bak/pgbak_20250117-152141.tar.zst | tar xf -
+
+# tell this cluster to start on recovery mode.
+# touch recovery.signal
+# append follow settings to postgresql.auto.conf
+cat <<'EOF' >> postgresql.auto.conf
+restore_command = 'cp /var/lib/postgresql/backup/zstd_bak/archive_wal/pg_wal/%f %p'
+recovery_target_time = '2025-01-17 07:23:00 UTC' #  in UTC TimeZone
+#recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
+EOF
+
+# docker restart pg14 # will print logs as follows
+database system is ready to accept read-only connections
+2025-01-17 16:07:34.093 CST [15] 日志:  恢复停止在事物 53186982 提交之前, 时间 2025-01-17 15:25:02.574454+08
+2025-01-17 16:07:34.093 CST [15] 日志:  pausing at the end of recovery
+2025-01-17 16:07:34.093 CST [15] 提示:  Execute pg_wal_replay_resume() to promote.
+
+# psql <<< pg_wal_replay_resume()
+```
+
+- pg_clone.sh 
+
+```sh
+#!/bin/bash
+set -e
+# 25 12 * * * bash /mnt/nas1/pgdb-clone/sh_backup.sh >> /tmp/pg_basebackup_cron.log 2>&1
+# extract: zstd -d -c ../base.tar.zst | tar xf - 
+printf '\n\n---------------------\n'
+workdir=$(realpath $(dirname $0))
+pushd $workdir
+
+bk_time=$(date +%Y%m%d-%H%M%S)
+bk_zstd=pgbak_${bk_time}.tar.zst
+
+echo "--> ${bk_time}, clean old backup files ---"
+find . -maxdepth 2 -name '*.tar.zst' -type f -mtime +5 -print -exec rm -rf {} \;  && wait
+echo "--> $(date '+%Y-%m-%d %H:%M:%S') starts pg_basebackup to $PWD/${bk_zstd}"
+
+export PGPORT=5432
+sh -c 'pg_basebackup -v -c fast -Xf -U postgres -Ft -D- | zstd -c' > $bk_zstd
+
+echo "--> $(date '+%Y-%m-%d %H:%M:%S') finish pg_basebackup to $PWD/${bk_zstd}"
+echo "--> zstd -d -c $PWD/${bk_zstd} | tar xf - #PWD‼️"
+```
