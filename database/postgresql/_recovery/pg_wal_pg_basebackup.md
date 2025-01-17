@@ -78,9 +78,9 @@ cd /data/archived_wal/wal_pg
 echo "---- $(date) ----"
 NAS_WAL=/mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal
 # compress and store info NAS, before 180mins from NOW
-find . -maxdepth 2 -name '*' -type f -mmin +180 -print -exec zstd -f --rm {} -o $NAS_WAL/{}.zst \;
+find . -maxdepth 2 -name '*' -type f -mmin +180 -print -exec zstd -q -f --rm {} -o $NAS_WAL/{}.zst \; #> /dev/null
 
 # cleanup old zst files, only keep 3days
 echo ">> cleanup wals in /mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal/*.zst"
-find $NAS_WAL/ -maxdepth 2 -name '*.zst' -type f -mtime +5 -print -exec rm -rf {} \;  && wait
+find $NAS_WAL/ -maxdepth 2 -name '*.zst' -type f -mtime +5 -print -exec rm -rf {} \; > /dev/null  && wait
 ```
