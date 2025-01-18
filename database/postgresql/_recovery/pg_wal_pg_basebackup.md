@@ -19,13 +19,13 @@ docker exec -it -upostgres pg-m1.dev bash /backup/zstd_bak/pg_clone.sh 2>&1 | te
 
 ```sh
 # extra to $PWD, cd ~/data
-zstd -d -c /backup/zstd_bak/pgbak_20250117-152141.tar.zst | tar xf -
+zstd -d -c /zstd_bak/pgbak_20250117-152141.tar.zst | tar xf -
 
 # tell this cluster to start on recovery mode.
 # touch recovery.signal
 # append follow settings to postgresql.auto.conf
 cat <<'EOF' >> postgresql.auto.conf
-restore_command = 'cp /var/lib/postgresql/backup/zstd_bak/archive_wal/pg_wal/%f %p'
+restore_command = 'cp /zstd_bak/archive_wal/pg_wal/%f %p'
 recovery_target_time = '2025-01-17 07:23:00 UTC' #  in UTC TimeZone
 #recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
 #restore_command = 'gunzip -c /path/to/archive/%f.gz > %p'
