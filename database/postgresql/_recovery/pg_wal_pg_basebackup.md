@@ -70,17 +70,20 @@ echo "--> zstd -d -c $PWD/${bk_zstd} | tar xf - #PWD‼️"
 
 ```sh
 # */20 * * * * flock -n /var/lock/cron_pg_vacuum_wal.lock -c 'sh -e /data/archived_wal/vacuum_wal.sh 2>&1 | tee -a /tmp/pg_archived_wal_prune.log'
-
-# 55 */2 * * *	sh -e /data/archived_wal/vacuum_wal.sh 2>&1 | tee -a /tmp/pg_archived_wal_prune.log
 set -e
 # goto WAL DIR as work_dir
+echo ""
 cd /data/archived_wal/wal_pg
-echo "---- $(date) ----"
-NAS_WAL=/mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal
-# compress and store info NAS, before 180mins from NOW
-find . -maxdepth 2 -name '*' -type f -mmin +180 -print -exec zstd -q -f --rm {} -o $NAS_WAL/{}.zst \; #> /dev/null
+echo ">> archived start $(date) , WAL size: $(du -sh ./)"
 
-# cleanup old zst files, only keep 3days
-echo ">> cleanup wals in /mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal/*.zst"
-find $NAS_WAL/ -maxdepth 2 -name '*.zst' -type f -mtime +5 -print -exec rm -rf {} \; > /dev/null  && wait
+#NAS_WAL=/mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal
+NAS_WAL=/mnt/wal_bin_log/prd-pg03-archived_wal
+# compress and store info NAS, before 120mins from NOW
+find . -maxdepth 2 -name '*' -type f -mmin +30 -print -exec zstd -f -q --rm {} -o $NAS_WAL/{}.zst \; | wc -l #> /dev/null
+
+# cleanup old zst files
+echo ">> cleanup WALs in $NAS_WAL/*.zst"
+find $NAS_WAL/ -maxdepth 2 -name '*.zst' -type f -mtime +3 -print -exec rm -rf {} \; | wc -l && wait
+
+echo ">> archived finish $(date) , WAL size: $(du -sh ./)"
 ```

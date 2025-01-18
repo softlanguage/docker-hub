@@ -1,24 +1,29 @@
 set -e
-# cleanup mysql binlog, at 55mins very 2hours
-# flock -n /tmp/cron_vacuum_mybinlog.lock -c "bash /xxx.sh 2>&1 | tee -a /tmp/xxx.log"
-# 55 */2 * * *	bash /opt/vdc1/_vacuum_bin_log.sh 2>&1 | tee -a /tmp/cron_vacuum_mysql_binlog.log
+# cleanup mysql binlog, at 55mins very 2hours [55 */2 * * *]
+# flock -n /tmp/mybinlog_archive_cron.lock -c "bash /opt/vdc1/archive_binlog.sh 2>&1 | tee -a /tmp/mybinlog_archive_cron.log"
+
+printf "\n\n>> $(date) # start archive...\n"
 
 # backup binlog to NAS
-function backup_binlog() {
-    binlog_dir=/opt/vdc1/binlog4mysql
-    dest_nas_dir=/mnt/wal_bin_log/mysql01-prd-binlog/
-    # copy files that were modified more than 60 minutes ago to the destination
-    # find $binlog_dir -maxdepth 1 -name '*' -type f -mmin +60 -exec rsync -aP {} $dest_nas_dir \;
-    find_ops="$binlog_dir -maxdepth 1 -name '*' -type f -mmin +60 -exec basename {}"
-    rsync -av --files-from=<(find $find_ops \;) $binlog_dir $dest_nas_dir
+backup_binlog() {
+binlog_dir=/opt/vdc1/binlog4mysql
+dest_nas_dir=/mnt/wal_bin_log/mysql01-prd-binlog/
+# copy files that were modified more than 60 minutes ago to the destination
+# find $binlog_dir -maxdepth 1 -name '*' -type f -mmin +60 -exec rsync -aP {} $dest_nas_dir \;
+rsync -av --files-from=<(find $binlog_dir -maxdepth 1 -name '*' \
+    -type f -mmin +60 -exec basename {} \;) $binlog_dir $dest_nas_dir
+
+# cleanup old binlog files on NAS
+find $dest_nas_dir/ -maxdepth 1 -name '*' -type f -mtime +5 -print -exec rm -rf {} \;
 }
 backup_binlog;
 
+printf "\n>> $(date) # archive binlogs info NAS: /mnt/wal_bin_log/mysql01-prd-binlog/ \n"
+
 # check diskusage & cleanup older binlog files
-function cleanup_older_binlog(){
+cleanup_older_binlog(){
 disk_of_binlog=/dev/vdc1
 
-echo "---- $(date) ----"
 percent_usage=$(df -hP  $disk_of_binlog | awk '{print $5}' |tail -1|sed 's/%$//g')
 percent_max=70
 echo $percent_usage
@@ -41,3 +46,4 @@ echo "usage is lesser than $percent_max";
 fi;
 }
 cleanup_older_binlog;
+printf "\n>> $(date) # archive vacuum older binlogs \n"
