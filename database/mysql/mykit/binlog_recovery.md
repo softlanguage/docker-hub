@@ -1,5 +1,15 @@
 - MySQL :: MySQL 8.0 Reference Manual :: 9.5 Point-in-Time (Incremental) Recovery 
 
+```sh
+# mysql8.0 clone
+# 1. copy clone to container, extra to ./data by tar -Izstd -xf bak.tar.zst
+# 2. rsync binlog files to rsync -avP /bak/mysql-bin.* /backup/binlog/ 
+# 3. check binlog and position: /var/lib/mysql/#clone/#status_recovery
+cat /var/lib/mysql/#clone/#status_recovery
+# 4. apply binlog, suppory re-apply, it will skip automatically 
+mysqlbinlog  --stop-datetime='2025-01-18 20:00:00' ./mysql-bin.000010 |mysql
+```
+
 ```txt
 MySQL :: MySQL 8.0 Reference Manual :: 9.5 Point-in-Time (Incremental) Recovery
 https://dev.mysql.com/doc/refman/5.7/en/point-in-time-recovery.html
@@ -30,6 +40,7 @@ mysql> SHOW MASTER STATUS;
 #The query returns which file is currently being used to record changes, and the current position within it. Typically,the files are stored in the datadir, unless, when starting the server, another location is specified with the --log-bin= option).
 #To find out the position of the snapshot taken, see the xtrabackup_binlog_info at the backup’s directory:
 $ cat /path/to/backup/xtrabackup_binlog_info
+> mysql-bin.000003      57
 #This result tells you which file was used at the moment of the backup for the binary log and its position. That position will be the effective one when you restore the backup:
 
 $ xtrabackup --copy-back --target-dir=/path/to/backup
