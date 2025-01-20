@@ -1,4 +1,6 @@
 #### s3fs-fuse 
+- aliyun-OSS, 数据管理 --> 生命周期
+> 您可以基于最后一次修改时间（Last Modified Time）以及最后一次访问时间（Last Access Time）的策略创建生命周期规则，定期将存储空间（Bucket）内的多个文件（Object）转储为指定存储类型，或者将过期的Object和碎片删除，从而节省存储费用。
 
 > https://github.com/s3fs-fuse/s3fs-fuse
 > https://github.com/kahing/goofys
