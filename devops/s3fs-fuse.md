@@ -23,10 +23,9 @@ s3fs mybucket /mpp/s3_zyb-backup  -ourl=http://oss-cn-hangzhou-internal.aliyuncs
 # mount with AK in /mnt/pass_s3zyb-backup
 s3fs mybucket /mpp/s3_zyb-backup -o passwd_file=/mnt/pass_s3zyb-backup -ourl=http://oss-cn-hangzhou-internal.aliyuncs.com
 
-# mount `mybucket` to `/mnt/mountpoint` in fstab
-mybucket /mnt/mountpoint fuse.s3fs _netdev,allow_other,use_path_request_style,url=https://url.to.s3/ 0 0
-mybucket /mnt/mountpoint fuse.s3fs _netdev,allow_other,use_path_request_style,url=http://oss-cn-hangzhou-internal.aliyuncs.com 0 0
-
+# mount `mybucket` to `/mnt/mountpoint` in fstab (test in ZYB with `/etc/passwd-s3fs`)
+mybucket /mnt/mountpoint fuse.s3fs _netdev,allow_other,url=https://url.to.s3/ 0 0
+zyb-walbin /mpp/s3_zyb-walbin fuse.s3fs _netdev,allow_other,url=https://oss-cn-hangzhou-internal.aliyuncs.com 0 0
 ```
 
 ```shell
@@ -36,8 +35,6 @@ dnf install https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/s
 # centos stream9
 dnf install https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/s/s3fs-fuse-1.95-1.el9.x86_64.rpm
 
-
 # --- apt info s3fs -----
 s3fs examplebucket /tmp/oss-bucket -o passwd_file=$HOME/.passwd-s3fs -ourl=http://oss-cn-hangzhou.aliyuncs.com
-
 ```
