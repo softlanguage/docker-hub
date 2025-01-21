@@ -14,8 +14,7 @@ archive_mode = 'on'
 archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'
 #psql -c "ALTER SYSTEM SET restore_command = 'gunzip -c /path/to/archive/%f.gz > %p';"
 #Use %% to embed an actual % character in the command.
-archive_command = 'f_rem=$(printf "d%%04d" $((0x%f %% 100))) && mkdir -p /archive_wal/$f_rem && cp -fa %p /archive_wal/$f_rem/%f'
-# printf "d%04d" $((0x00000002000000420000001D % 100))
+#printf "d%04d" $((0x00000002000000420000001D % 100))
 ```
 
 - pg_basebackup
@@ -86,6 +85,8 @@ echo ">> archived start $(date) , WAL size: $(du -sh ./)"
 
 #NAS_WAL=/mnt/prd-nas/bak4zyb/pgdb-prd-archived_wal
 NAS_WAL=/mnt/wal_bin_log/prd-pg03-archived_wal
+# printf "d%04d" $((0x00000002000000420000001D % 100))
+# find -printf '%t{}' -exec xxx %t {} # make datetime as folder
 # compress and store info NAS, before 120mins from NOW
 find . -maxdepth 2 -name '*' -type f -mmin +30 -print -exec zstd -f -q --rm {} -o $NAS_WAL/{}.zst \; | wc -l #> /dev/null
 

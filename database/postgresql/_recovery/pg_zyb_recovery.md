@@ -19,7 +19,6 @@ systemctl restart postgresql-13.service
 # calculate the remainder
 printf "d%04d" $((0x00000002000000420000001D % 100))
 #Use %% to embed an actual % character in the command.
-#f_rem=$((0x%f %% 100)) && mkdir -p /archive_wal/$f_rem && cp -fa %p /archive_wal/$f_rem/%f
 
 # To check the size we can execute `show wal_segment_size` 
 # Parameter is set only at the cluster creation 
