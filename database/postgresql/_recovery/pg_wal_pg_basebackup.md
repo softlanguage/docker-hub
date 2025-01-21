@@ -1,22 +1,30 @@
+- how to increase wal_segments_size
+```sh
+# To check the size we can execute
+psql -e 'show wal_segment_size'
+# Parameter is set only at the cluster creation 
+initdb --wal-segsize=X # or later with pg_resetwal --wal-segsize=X, pg_resetwal --help
+pg_resetwal --wal-segsize=64 # set=64MB, this command should be run only if cluster is properly shut-down and should never be run on running server or crashed server.
+```
 
 - config in postgresql.auto.conf
-
 ```conf
 # archive
 archive_mode = 'on'
 archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'
 #psql -c "ALTER SYSTEM SET restore_command = 'gunzip -c /path/to/archive/%f.gz > %p';"
+#Use %% to embed an actual % character in the command.
+archive_command = 'f_rem=$(printf "d%%04d" $((0x%f %% 100))) && mkdir -p /archive_wal/$f_rem && cp -fa %p /archive_wal/$f_rem/%f'
+# printf "d%04d" $((0x00000002000000420000001D % 100))
 ```
 
 - pg_basebackup
-
 ```sh
 # 25 23 * * * sh -ec 'cmd', base backup
 docker exec -it -upostgres pg-m1.dev bash /backup/zstd_bak/pg_clone.sh 2>&1 | tee -a /tmp/pg_basebackup_cron.log
 ```
 
 - recovery to a target_time
-
 ```sh
 # extra to $PWD, cd ~/data
 zstd -d -c /zstd_bak/pgbak_20250117-152141.tar.zst | tar xf -
