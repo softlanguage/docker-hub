@@ -50,8 +50,11 @@ do_archive(){
 do_restore(){
   #cp $dir_archived/$dir_rem/$wal_leafname $wal_location
   zstd -c -d $dir_archived/$dir_rem/$wal_leafname.zst > $wal_location
+  echo "$(date +%F\ %T) -- restore from $dir_rem/$wal_leafname.zst"
 }
 
+# mock by ls | xargs
+# ls 0000000* | xargs -I{} sh ../archive_restore_wal.sh /backup/archive_wal/pg_wal/{} {} do_archive 
 # call do_archive/do_restore
 $3
 
@@ -61,3 +64,4 @@ $3
 #recovery_target_time = '2025-01-17 07:23:00 UTC' #  in UTC TimeZone
 #recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
 #chmod +x /var/lib/postgresql/backup/archivedWAL/archive_restore_wal.sh
+# ls 0000000* | xargs -I{} sh ../archive_restore_wal.sh /backup/archive_wal/pg_wal/{} {} do_archive 
