@@ -46,6 +46,7 @@ do_archive(){
   fi
 }
 
+# touch recovery.signal to restore
 do_restore(){
   #cp $dir_archived/$dir_rem/$wal_leafname $wal_location
   zstd -c -d $dir_archived/$dir_rem/$wal_leafname.zst > $wal_location
