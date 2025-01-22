@@ -12,7 +12,9 @@ wal_location=$1
 wal_leafname=$2
 arg_cleanup=$4
 # dash-shell get 10bytes, max=15bytes, not support ${str:-15}
-hex_leafname=$(expr substr "$wal_leafname" $(expr length "$wal_leafname" - 9) 10)
+# wal_leafname maybe: 00000001000000420000003D or 00000001000000420000003D.0011D718.backup
+hex_wal_name="${wal_leafname%%.*}" 
+hex_leafname=$(expr substr "$hex_wal_name" $(expr length "$hex_wal_name" - 9) 10)
 # remainder for wal_leafname: [10~999]
 remainder_base=5
 remainder_value="$((0x$hex_leafname % $remainder_base + 1))"
@@ -64,4 +66,4 @@ $3
 #recovery_target_time = '2025-01-17 07:23:00 UTC' #  in UTC TimeZone
 #recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
 #chmod +x /var/lib/postgresql/backup/archivedWAL/archive_restore_wal.sh
-# ls 0000000* | xargs -I{} sh ../archive_restore_wal.sh /backup/archive_wal/pg_wal/{} {} do_archive 
+# ls 0000000* | xargs -I{} sh ../archive_restore_wal.sh /backup/archive_wal/pg_wal/{} {} do_archive
