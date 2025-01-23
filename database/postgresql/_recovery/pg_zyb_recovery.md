@@ -37,6 +37,8 @@ archive_command = 'f_rem=$(printf "d%%04d" $((0x%f %% 100))) && mkdir -p /archiv
 #psql -c "ALTER SYSTEM SET restore_command = 'gunzip -c /path/to/archive/%f.gz > %p';"
 restore_command = 'zstd -d /mnt/wal_bin_log/prd-pg03-archived_wal/%f.zst -o %p'
 recovery_target_time = '2025-01-18 03:00:00+8' # UTC+8 timezone
+# PostgreSQL will perform recovery until the end of the available WAL logs,
+#   and auto Execute pg_wal_replay_resume() to promote.
 #recovery_target_time = '2025-01-18 07:00:00 UTC' #  in UTC TimeZone
 #restore_command = 'zstd -d /path/to/archive/%f.zst -o %p'
 #restore_command = 'gunzip -c /path/to/archive/%f.gz > %p'

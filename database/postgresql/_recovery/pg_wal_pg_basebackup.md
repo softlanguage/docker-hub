@@ -1,4 +1,8 @@
 - how to increase wal_segments_size
+* If you `don't set recovery_target_*` (recovery_target_time,recovery_target_lsn,recovery_target_lsn)
+* PG will perform recovery until the end of the available WAL logs, 
+* and auto `Execute pg_wal_replay_resume()` to promote.
+
 ```sh
 # To check the size we can execute
 psql -c 'show wal_segment_size'
