@@ -26,7 +26,6 @@ case "$wal_leafname" in
   *)
     # "$wal_leafname is a Hex string"
     # dash-shell get 10bytes, max=15bytes, not support ${str:-15}
-    # hex_leafname=[ $hex_offset -gt 0 ] && $(expr substr "$wal_leafname" $hex_offset 10) || $wal_leafname
     hex_offset=$(( ${#wal_leafname} -9 ))
     if [ $hex_offset -gt 0 ]; then
       hex_leafname=$(expr substr "$wal_leafname" $hex_offset 10)
