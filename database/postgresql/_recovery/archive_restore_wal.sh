@@ -1,3 +1,4 @@
+#!/bin/dash
 #archive_mode = 'on/off'
 #archive_command = '/var/lib/postgresql/backup/archivedWAL/archive_restore_wal.sh %p %f do_archive'
 #restore_command = '/var/lib/postgresql/backup/archivedWAL/archive_restore_wal.sh %p %f do_restore'
@@ -11,13 +12,26 @@ dir_archived=/var/lib/postgresql/backup/archivedWAL
 wal_location=$1
 wal_leafname=$2
 arg_cleanup=$4
-# dash-shell get 10bytes, max=15bytes, not support ${str:-15}
-# wal_leafname maybe: 00000001000000420000003D or 00000001000000420000003D.0011D718.backup
-hex_wal_name="${wal_leafname%%.*}" 
-hex_leafname=$(expr substr "$hex_wal_name" $(expr length "$hex_wal_name" - 9) 10)
-# remainder for wal_leafname: [10~999]
+# remainder_base for wal_leafname: [4~999]
 remainder_base=5
-remainder_value="$((0x$hex_leafname % $remainder_base + 1))"
+
+# wal_leafname maybe: 00000001000000420000003D, 000**.history, 000**.backup
+case "$wal_leafname" in
+  *[!0-9a-fA-F]*)
+    # wal_leafname is 000**.history or 000**.backup, not a Hex string
+    hex_leafname=${wal_leafname%%.*}
+    echo "$(date +%F\ %T) -- %f_has.dot, dir_rem=d000 %f=$wal_leafname, hex.LSN=$hex_leafname"
+    remainder_value="000"
+    ;;
+  *)
+    # "$wal_leafname is a Hex string"
+    # dash-shell get 10bytes, max=15bytes, not support ${str:-15}
+    hex_leafname=$(expr substr "$wal_leafname" $(expr length "$wal_leafname" - 9) 10)
+    remainder_value="$((0x$hex_leafname % $remainder_base + 1))"
+    ;;
+esac
+
+# sub folder by remainder of wal_LSN_%f 
 dir_rem=$(printf "d%03d" "$remainder_value")
 # location of archived WAL
 #printf "
