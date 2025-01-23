@@ -1,14 +1,17 @@
 - how to increase wal_segments_size
 ```sh
 # To check the size we can execute
-psql -e 'show wal_segment_size'
+psql -c 'show wal_segment_size'
 # Parameter is set only at the cluster creation 
 initdb --wal-segsize=X # or later with pg_resetwal --wal-segsize=X, pg_resetwal --help
 pg_resetwal --wal-segsize=64 # set=64MB, this command should be run only if cluster is properly shut-down and should never be run on running server or crashed server.
+psql -c 'ALTER SYSTEM SET wal_compression = on; SELECT pg_reload_conf();'
 ```
 
 - config in postgresql.auto.conf
 ```conf
+wal_compression = on
+full_page_writes = on
 # archive
 archive_mode = 'on'
 archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'

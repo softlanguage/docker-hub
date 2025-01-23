@@ -67,3 +67,8 @@ $3
 #recovery_target_time = '2025-01-17 15:27:00+8' # in UTC+8 TimeZone
 #chmod +x /var/lib/postgresql/backup/archivedWAL/archive_restore_wal.sh
 # ls 0000000* | xargs -I{} sh ../archive_restore_wal.sh /backup/archive_wal/pg_wal/{} {} do_archive
+
+#### postgresql.conf ####
+# wal_compression = on, full_page_writes = on
+# psql -c 'ALTER SYSTEM SET wal_compression = on; SELECT pg_reload_conf();'
+# pg_resetwal --wal-segsize=64 # set=64MB, psql -c 'show wal_segment_size;'
