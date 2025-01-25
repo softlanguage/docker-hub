@@ -40,6 +40,7 @@ set -e
 
 # restore
 rm -rf /var/lib/postgresql/data/*
+chmod 0750 /var/lib/postgresql/data
 pg_basebackup -v -c fast -X stream -U replica_only -h 10.8.8.204 -p 5432 -D $HOME/data # & disown %-
 
 # timeout 5 sh -c 'while ! pgrep pg_basebackup; do sleep 2; done;'
