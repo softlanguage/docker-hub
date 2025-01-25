@@ -44,8 +44,9 @@ pg_basebackup -v -c fast -X stream -U replica_only -h 10.8.8.204 -p 5432 -D $HOM
 
 # timeout 5 sh -c 'while ! pgrep pg_basebackup; do sleep 2; done;'
 
-# postgres -p12345, PGPORT=12345
-postgres -h 127.0.0.1 & disown %-
+# ALTER SYSTEM SET archive_mode = off;
+# postgres -p12345, PGPORT=12345, trun archive_mode=off
+postgres -h 127.0.0.1 --archive_mode=off & disown %-
 pg_wait=0
 while ! pg_isready -d postgres -p 5432 && [ $pg_wait -lt 15 ]; do
   sleep 2;
@@ -66,6 +67,7 @@ ALTER ROLE postgres WITH PASSWORD 'xxx';
 ALTER ROLE dba WITH PASSWORD 'xxx';
 ALTER ROLE zyb WITH PASSWORD 'xxx';
 -- ALTER ROLE dev RENAME TO zyb;
+-- ALTER SYSTEM SET archive_mode = off;
 PSQL
 EOF
 
