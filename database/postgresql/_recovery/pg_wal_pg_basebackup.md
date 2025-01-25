@@ -4,8 +4,14 @@
 * and auto `Execute pg_wal_replay_resume()` to promote.
 
 ```sh
+# change wal_segsize=64m, check postgresql.conf:
+# ["min_wal_size" must be at least twice "wal_segment_size"]
+pg_image=" softlang/postgres-cn:16.3"
+# docker stop pg-dev-m1 && docker restart pg-dev-m1
+docker run -i --name resetwal4pg -v ./data:/pgdata $pg_image pg_resetwal -D /pgdata --wal-segsize=64
 # To check the size we can execute
 psql -c 'show wal_segment_size'
+
 # Parameter is set only at the cluster creation 
 initdb --wal-segsize=X # or later with pg_resetwal --wal-segsize=X, pg_resetwal --help
 pg_resetwal --wal-segsize=64 # set=64MB, this command should be run only if cluster is properly shut-down and should never be run on running server or crashed server.

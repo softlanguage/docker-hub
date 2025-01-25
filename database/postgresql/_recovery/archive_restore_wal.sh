@@ -91,3 +91,5 @@ $3
 # wal_compression = on, full_page_writes = on
 # psql -c 'ALTER SYSTEM SET wal_compression = on; SELECT pg_reload_conf();'
 # pg_resetwal --wal-segsize=64 # set=64MB, psql -c 'show wal_segment_size;'
+# ["min_wal_size" must be at least twice "wal_segment_size"]
+# docker run -i --name resetwal4pg -v ./data:/pgdata $pg_image pg_resetwal -D /pgdata --wal-segsize=64
