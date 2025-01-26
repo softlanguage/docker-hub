@@ -1,13 +1,13 @@
-## restore to gig.NAS /mnt/gig/debug/prd-pg03-recovery/data
+## restore to gig.NAS /mpp/pgdata
 ```sh
-cd /mnt/gig/debug/prd-pg03-recovery/data
-zstd -d -c /mnt/prd-nas/bak4zyb/pgdb-prd-clone/zyb_prod_pg_20250117-232501.tar.zst | tar xf -
+cd /mpp/pgdata
+zstd -d -c /mnt/pgdb-clone/pg_20250117-232501.tar.zst | tar xf -
 
 # tell this cluster to start on recovery mode.
 touch recovery.signal`
 # append follow settings to postgresql.auto.conf
 cat <<'EOF' >> postgresql.auto.conf
-restore_command = 'zstd -d /mnt/wal_bin_log/prd-pg03-archived_wal/%f.zst -o %p'
+restore_command = 'zstd -c -d /mnt/wal_bin_log/prd-pg03-archived_wal/%f.zst > %p'
 recovery_target_time = '2025-01-18 15:00:00+8' # UTC+8 timezone
 EOF
 
@@ -16,9 +16,10 @@ vim /etc/systemd/system/postgresql-13.service
 systemctl daemon-reload
 systemctl restart postgresql-13.service 
 
-# calculate the remainder
-printf "d%04d" $((0x00000002000000420000001D % 100))
-#Use %% to embed an actual % character in the command.
+# S3 as NAS, mount with AK in /mnt/pass_s3zyb-backup
+s3fs mybucket /mpp/s3_zyb-backup -o passwd_file=/mnt/pass_s3zyb-backup -ourl=http://url.to.oss
+# mount `mybucket` to `/mnt/mountpoint` in fstab (test in ZYB with `/etc/passwd-s3fs`)
+mybucket /mnt/mountpoint fuse.s3fs _netdev,allow_other,url=https://url.to.s3/ 0 0
 
 # To check the size we can execute `show wal_segment_size` 
 # Parameter is set only at the cluster creation 
@@ -31,11 +32,11 @@ pg_resetwal --wal-segsize=64 # set=64mb, this command should be run only if clus
 ```conf
 # archive
 archive_mode = 'on'
-archive_command = 'test ! -f /backup/archive_wal/%f && cp %p /backup/archive_wal/%f'
-#Use %% to embed an actual % character in the command.
-archive_command = 'f_rem=$(printf "d%%04d" $((0x%f %% 100))) && mkdir -p /archive_wal/$f_rem && cp -fa %p /archive_wal/$f_rem/%f'
+archive_command = 'cp -fa %p /backup/archive_wal/%f'
 #psql -c "ALTER SYSTEM SET restore_command = 'gunzip -c /path/to/archive/%f.gz > %p';"
-restore_command = 'zstd -d /mnt/wal_bin_log/prd-pg03-archived_wal/%f.zst -o %p'
+#Use %% to embed an actual % character in the command.
+archive_command = 'zstd -c %p > /archivedWAL/%f.zst'
+restore_command = 'zstd -c -d /archivedWAL/%f.zst > %p'
 recovery_target_time = '2025-01-18 03:00:00+8' # UTC+8 timezone
 # PostgreSQL will perform recovery until the end of the available WAL logs,
 #   and auto Execute pg_wal_replay_resume() to promote.
