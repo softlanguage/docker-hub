@@ -5,8 +5,8 @@
 xtrabackup --backup --target-dir=/path/to/backup
 # prepare a backup for starting mysql server on the backup.
 xtrabackup --prepare --target-dir=/path/to/backup
-mysql -e 'SHOW BINARY LOGS' -S /var/lib/mysql/mysql.sock
-mysql -e 'SHOW MASTER STATUS;' -S /var/lib/mysql/mysql.sock
+mysql -e 'SHOW BINARY LOGS' -S /var/lib/mysql/mysqld.sock
+mysql -e 'SHOW MASTER STATUS;' -S /var/lib/mysql/mysqld.sock
 
 cat /path/to/backup/xtrabackup_binlog_info
 # --copy-back, Copy all the files in a previously made backup from the backup directory to their original locations.
@@ -18,6 +18,17 @@ mysqlbinlog /path/to/datadir/mysql-bin.000003 /path/to/datadir/mysql-bin.000004 
 # if the point is 11-12-25 01:00:00, the command moves the the database forward to that point-in-time
 mysqlbinlog /path/to/datadir/mysql-bin.000003 /path/to/datadir/mysql-bin.000004 \
 --start-position=57 --stop-datetime="11-12-25 01:00:00" | mysql -u root -p
+```
+
+- mysql.cnf
+```conf
+# for mysql -S/var/lib/mysql/mysqld.sock
+[client]
+socket=/var/lib/mysql/mysqld.sock
+# Only for mysql 8.0
+# docker_path: /etc/mysql/conf.d/mysqld.cnf)
+[mysqld]
+socket = /var/lib/mysql/mysqld.sock
 ```
 
 - run by docker
@@ -34,10 +45,10 @@ docker run -i --rm -uroot percona/percona-xtrabackup:8.0 xtrabackup --help
 # run xtrabackup, and tee log to /tmp/xtrabackup.log
 podmysql=mysql8.0
 docker run -i --rm -uroot --volumes-from $podmysql percona/percona-xtrabackup:8.0 \
-xtrabackup --backup --datadir=/var/lib/mysql/ --target-dir=/backup -S /var/lib/mysql/mysql.sock 2>&1 | tee /tmp/xtrabackup.log
+xtrabackup --backup --datadir=/var/lib/mysql/ --target-dir=/backup -S /var/lib/mysql/mysqld.sock 2>&1 | tee /tmp/xtrabackup.log
 
 # or run with 2 steps: 1. create container, 2. run by start -i
-docker create -uroot --name xtrabackup --volumes-from mysql8.0 percona/percona-xtrabackup:8.0 xtrabackup --backup --datadir=/var/lib/mysql/ -S /var/lib/mysql/mysql.sock --target-dir=/backup/zip
+docker create -uroot --name xtrabackup --volumes-from mysql8.0 percona/percona-xtrabackup:8.0 xtrabackup --backup --datadir=/var/lib/mysql/ -S /var/lib/mysql/mysqld.sock --target-dir=/backup/zip
 # 2. start xtrabackup 
 docker start -i xtrabackup 2>&1 | tee /tmp/debug01.log
 ```
