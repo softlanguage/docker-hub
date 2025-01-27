@@ -1,5 +1,16 @@
 
+- demo in prj-hs-crm
+```sh
+docker run -i --rm -uroot --volumes-from mysql-m1.dev percona/percona-xtrabackup:8.0 sh -ec '
+# backup to /backup/xbak01
+xtrabackup --backup --datadir=/var/lib/mysql/ --target-dir=/backup/xbak01 -S /var/lib/mysql/mysql.sock
+# prepare a backup to make sure it can be starting
+xtrabackup --prepare --target-dir=/backup/xbak01
+' 2>&1 | tee /tmp/mysql_xtrabackup.log
+```
+
 - point-in-time recovery
+
 ```sh
 # take backup to target-dir
 xtrabackup --backup --target-dir=/path/to/backup
