@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# 25 12 * * * bash /mnt/nas1/pgdb-clone/sh_backup.sh >> /tmp/pg_basebackup_cron.log 2>&1
+# 25 12 * * * bash /mnt/nas1/pgdb-bak/clone.sh >> /tmp/pg_basebackup_cron.log 2>&1
 # extract: zstd -d -c ../base.tar.zst | tar xf - 
 printf "\n--> pg_basebackup $PWD/$0\n"
 workdir=$(realpath $(dirname $0))
