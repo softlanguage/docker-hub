@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:16.4 . 
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:16.5 . 
 # postgresql-16, support Chinese, base on bookworm
-FROM postgres:16.4-bullseye
+FROM postgres:16.5-bullseye
 
 RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
 # the followed link list all supported LC_xxx
@@ -16,4 +16,4 @@ ENV LC_CTYPE zh_CN.utf8
 LABEL softlang_initdb="initdb -D /pgdata --wal-segsize=64"
 LABEL softlang_tag="softlang LC_COLLATE,LC_CTYPE=zh_CN.utf8, plugins: $plugins, utils: $packages"
 USER postgres
-# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:16.4
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:16.5
