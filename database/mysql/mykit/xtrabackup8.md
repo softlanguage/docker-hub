@@ -1,10 +1,21 @@
 
 - demo in prj-hs-crm
 ```sh
+set -e
+function do_backup {
+# backup and compress to xbstream file
 docker run -i --rm -uroot --volumes-from mysql-m1.dev percona/percona-xtrabackup:8.0 sh -ec '
-xtrabackup --stream=xbstream --compress --backup --datadir=/var/lib/mysql/ -S /var/lib/mysql/mysql.sock > /backup/zip/mybak01.zst'
+xtrabackup --stream --compress --backup --datadir=/var/lib/mysql/ -S /var/lib/mysql/mysql.sock > /backup/zip/mybak01.xbstream'
+}
 
+function do_prepare() {
+# decompress and prepare
+docker run -i --rm -uroot --volumes-from mysql-m1.dev percona/percona-xtrabackup:8.0 sh -ec '
+xbstream -C /newdb/test1/ --decompress -x < mybak01.xbstream;
+xtrabackup --prepare --target-dir=/newdb/test1/'
+}
 
+# backup to target-dir
 docker run -i --rm -uroot --volumes-from mysql-m1.dev percona/percona-xtrabackup:8.0 sh -ec '
 # backup to /backup/xbak01
 xtrabackup --backup --datadir=/var/lib/mysql/ --target-dir=/backup/xbak01 -S /var/lib/mysql/mysql.sock
