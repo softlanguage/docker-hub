@@ -1,4 +1,24 @@
 
+- run xtrabackup with ssh for remote host
+```sh
+# ----- from remote to local -----
+# 1. backup with packed from ssh-remote and save into local ./bak1.xbstream 
+ssh kubic01.zyb 'docker exec -i xtrabackup xtrabackup --backup --stream --compress=zstd' > ./bak1.xbstream
+
+# 2. restore from local bak01.xbstream to ssh-remote
+ssh kubic01.zyb 'docker exec -i xtrabackup xbstream -C /backup/zip/ --decompress -x' < bak1.xbstream
+# 3. preapre
+ssh kubic01.zyb 'docker exec -i xtrabackup xtrabackup --prepare --target-dir=/backup/zip/'
+
+# ---- from local to remote ----
+# 1. backup
+docker exec -i xtrabackup xtrabackup --backup --stream --compress=zstd | ssh k81-dev-dss 'cat - > /gig/bak02.xbstream'
+docker exec -i xtrabackup xtrabackup --backup --stream --compress=zstd | ssh k81-dev-dss 'dd of=/gig/bak03.xbstream'
+# 2. restore
+ssh k81-dev-dss 'cat /gig/bak02.xbstream' | docker exec -i xtrabackup xbstream -C /backup/zip/ --decompress -x
+docker exec -i xtrabackup xtrabackup --prepare --target-dir=/backup/zip/
+```
+
 - demo in prj-hs-crm
 ```sh
 set -e
