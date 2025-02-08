@@ -58,3 +58,6 @@ location /$ui_pc { alias $uhome/app/$ui_pc/; try_files $try_files /$ui_pc/index.
 }" > /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
+
+# http{ map $sent_http_content_type $expires { default off; text/html epoch; }}
+# set html expires: location / {expires $expires;}
