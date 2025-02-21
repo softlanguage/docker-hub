@@ -21,3 +21,25 @@ apt-get update \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ```
+
+- mysql_fdw
+
+```sql
+CREATE SERVER foreign_server
+        FOREIGN DATA WRAPPER postgres_fdw
+        OPTIONS (host '192.83.123.89', port '5432', dbname 'foreign_db');
+ALTER SERVER foreign_server_mysqlprd OPTIONS (SET fetch_size '1000');
+ALTER SERVER foreign_server_mysqlprd OPTIONS (SET reconnect 'true');
+
+/*https://github.com/EnterpriseDB/mysql_fdw
+** MySQL Foreign Data Wrapper for PostgreSQL
+host=xxx as string, optional, default 127.0.0.1
+port=xxx as integer, optional, default 3306
+
+init_command=xxx as string, optional, no default, SQL statement to execute when connecting to the MySQL server.
+
+reconnect=xx as boolean, optional, default false, Enable or disable automatic reconnection to the MySQL server if the existing connection is found to have been lost.
+
+fetch_size=1000 as integer, optional, default 100, This option specifies the number of rows mysql_fdw should get in each fetch operation. It can be specified for a foreign table or a foreign server. The option specified on a table overrides an option specified for the server.
+*/
+```
