@@ -1,4 +1,6 @@
 # FAQ
+> https://github.com/ollama/ollama/blob/main/docs/faq.md
+> https://github.com/ollama/ollama-python
 
 ## How can I upgrade Ollama?
 
