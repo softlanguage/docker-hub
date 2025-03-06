@@ -4,7 +4,11 @@
 set -e
 
 export OLLAMA_HOST=0.0.0.0:11434
-export OLLAMA_MODELS=/data/ollama/models 
+export OLLAMA_MODELS=/data/ollama/models
+# https://github.com/ollama/ollama-python
+# https://github.com/ollama/ollama/blob/main/docs/faq.md
+export OLLAMA_NUM_PARALLEL=16
+export OLLAMA_MAX_LOADED_MODELS=16
 
 # disable proxy
 export no_proxy= 
@@ -24,6 +28,7 @@ http_proxy=http://tinyproxy.v2ray:8888
 nohup ollama serve > $(realpath $0).log 2>&1 & disown
 
 printf "\nOLLAMA_MODELS=${OLLAMA_MODELS}\nhttp://${OLLAMA_HOST}\n\n"
+# https://github.com/ollama/ollama-python
 
 # Example usage (commented out):
 # ollama run llama3
