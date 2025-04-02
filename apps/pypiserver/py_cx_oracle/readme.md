@@ -1,3 +1,15 @@
+#### python with cx_oracle
+
+```sh
+pip install cx_Oracle
+python -c "import cx_Oracle; print(cx_Oracle.version)"
+
+python -c "import cx_Oracle; 
+connection = cx_Oracle.connect('username/password@hostname:port/service_name'); 
+print(connection.version); 
+connection.close()"
+```
+
 #### Run this image as a job container
 
 - demo
