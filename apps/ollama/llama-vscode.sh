@@ -20,6 +20,7 @@ llama-server \
     --port 8012 -ngl 99 -fa -u
 '
 
+# openssl rand -base64 32
 # --api-key KEY, API key to use for authentication (default: none)
 export LLAMA_API_KEY=""
 # --cache-resuse=0.default
@@ -35,6 +36,10 @@ nohup llama-server -m $cwd/models/qwen2.5-coder-7b-instruct-q6_k.gguf -ngl 99 --
             > $(realpath $0).log 2>&1 & disown
 
 printf "
+https://github.com/ggml-org/llama.vscode
+The plugin requires FIM-compatible models: HF collection
+    https://huggingface.co/collections/ggml-org/llamavim-6720fece33898ac10544ecf9
+
 $(ifconfig eth0|grep inet)
 http://0.0.0.0:8012
 tail -f start_codellama-7b-python.sh.log
