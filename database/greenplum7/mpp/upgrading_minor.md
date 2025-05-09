@@ -1,6 +1,20 @@
 #### Upgrading from 7.x to a Newer 7.x Release
 > https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-greenplum/7/greenplum-database/install_guide-upgrading_minor.html
 
+- gp7 upgrade steps [ZYB-GP7]
+
+```sh
+# [gpadmin] stop
+gpstop -M fast
+
+# [root] install, need --allowerasing (autoremove early installed version) 
+dnf install ./greenplum-db-7.3.3-el8-x86_64.rpm --allowerasing
+
+# [gpadmin] start instance
+gpstart
+gpstate
+```
+
 - An upgrade from Greenplum Database 7.x to a newer 7.x release involves stopping Greenplum Database, updating the Greenplum Database software binaries, and restarting Greenplum Database. If you are using Greenplum Database extension packages there are additional requirements. See Prerequisites in the previous section.
 
 Log in to your Greenplum Database master host as the Greenplum administrative user:
@@ -21,6 +35,8 @@ If you used yum to install Greenplum Database to the default location, run these
 
 ```sh
 $ sudo yum upgrade ./greenplum-db-<version>-<platform>.rpm
+# --allowerasing will auto remove installed early version
+$ sudo dnf install ./greenplum-db-7.3.3-el8-x86_64.rpm --allowerasing 
 ```
 
 - The yum command installs the new Greenplum Database software files into a version-specific directory under /usr/local and updates the symbolic link /usr/local/greenplum-db to point to the new installation directory.
