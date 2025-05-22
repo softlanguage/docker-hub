@@ -1,6 +1,5 @@
 #### migrate GP / PG to New-PG
 
-
 - Create new instance with zhCN locate
 ```sh
 # localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
@@ -16,6 +15,10 @@ diff postgresql.conf ../data/postgresql.conf
 grep -E '^[a-zA-Z_\.]+[[:space:]]*=' postgresql.conf
 # list all settings
 psql -U postgres -c "SHOW ALL"
+
+# postgres clusters
+pg_lsclusters
+# pg_dropcluster 16 main
 ```
 
 - migrate 
