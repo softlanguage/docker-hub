@@ -17,7 +17,8 @@ diff postgresql.conf ../data/postgresql.conf
 ```sh
 # migrate roles
 pg_dumpall -r > roles.dump
-
+# GRANT pg_read_all_data TO etl;
+# GRANT pg_write_all_data TO etl;
 # migrate db
 createdb -p5333 new_db
 pg_dump -O -x -d my_db -h 127.0.0.1 -p5677 -U postgres | psql -p5333 -d new_db
