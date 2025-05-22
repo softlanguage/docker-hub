@@ -11,6 +11,11 @@ export LC_CTYPE=zh_CN.utf8
 
 # compare settings
 diff postgresql.conf ../data/postgresql.conf 
+
+# To list all available configuration parameters from your postgresql.conf using grep
+grep -E '^[a-zA-Z_\.]+[[:space:]]*=' postgresql.conf
+# list all settings
+psql -U postgres -c "SHOW ALL"
 ```
 
 - migrate 
