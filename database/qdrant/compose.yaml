@@ -1,0 +1,33 @@
+# docker compose -p qdrant -f compose.yaml up -d
+volumes:
+  qdrant_data:
+    name: qdrant_data
+    driver: local
+    driver_opts:
+      type: none
+      device: /data/pods/qdrant/storage
+      o: bind
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.15.5
+    container_name: qdrant-db
+    hostname: qdrant-db
+    # Restart policy for production/testing
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+    # Map API ports to the host machine
+    network_mode: bridge
+    ports:
+      - "6333:6333" # REST API
+      - "6334:6334" # gRPC API
+      
+    # Persistent storage for Qdrant data
+    volumes:
+      - qdrant_data:/qdrant/storage
+      
+    # Set the CPU and Memory resource limits
+    cpus: '2'
+    mem_limit: 4gb
+    memswap_limit: -1
+    shm_size: 1gb
