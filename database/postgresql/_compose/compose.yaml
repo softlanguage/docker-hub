@@ -22,11 +22,13 @@ services:
     #command: sh -c 'exec $(command -v /zyb_start.zsh || echo "tail -f /dev/null")'
     user: postgres
     environment:
-      - TZ=Asia/Shanghai
+      - PGPORT=5432
       - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD=123654
       - POSTGRES_USER=postgres
       - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_INITDB_ARGS=--wal-segsize=64
+      - TZ=Asia/Shanghai
       - LC_COLLATE=zh_CN.utf8
       - LC_CTYPE=zh_CN.utf8
     volumes:

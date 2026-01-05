@@ -20,6 +20,7 @@ services:
     environment:
       - "PGPORT=6432"
       - "PGDATA=/var/lib/postgresql/v18"
+      - "POSTGRES_INITDB_ARGS=--wal-segsize=64"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=123654"
       - "POSTGRES_DB=app"
