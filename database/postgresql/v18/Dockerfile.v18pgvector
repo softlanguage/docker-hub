@@ -1,0 +1,21 @@
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:18-pgvector . 
+# postgresql-18, support Chinese, base on bookworm
+FROM postgres:18-bookworm
+
+# https://github.com/docker-library/postgres/blob/master/18/bookworm/Dockerfile
+RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
+# the followed link list all supported LC_xxx
+# https://www.postgresql.org/docs/current/locale.html
+# LC_COLLATE and LC_CTYPE , micro=https://micro-editor.github.io
+arg plugins="postgresql-18-repack postgresql-18-mysql-fdw postgresql-18-pgvector"
+ARG packages="iputils-ping wget htop micro procps net-tools"
+#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources && \
+RUN apt update && apt install -y $plugins $packages \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENV LC_COLLATE zh_CN.utf8
+ENV LC_CTYPE zh_CN.utf8
+LABEL softlang_initdb="initdb -D /pgdata --wal-segsize=64"
+LABEL softlang_tag="softlang LC_COLLATE,LC_CTYPE=zh_CN.utf8, plugins: $plugins, utils: $packages"
+USER postgres
+# docker run -itd --rm --name pgdb -e POSTGRES_PASSWORD=123654 softlang/postgres-cn:18.8-pgvector

@@ -1,0 +1,38 @@
+# https://github.com/pgvector/pgvector
+# docker pull pgvector/pgvector:pg18
+# docker compose -p pg18 -f compose.yaml up -d
+# docker compose -p pg18 down
+# chown -R 999:999 ./pgdata # or Z:label pgvecotr_data:/var/lib/postgresql:Z
+name: pg18
+volumes:
+  pgvecotr_data:
+    name: pgvector_data
+    driver: local
+    driver_opts:
+      type: none
+      device: /data/pgdb/pgdata
+      o: bind
+services:
+  pgvector-zyb:
+    image: softlang/postgres-cn:18-pgvector
+    hostname: pgvector18.local
+    container_name: pgvector18.local
+    environment:
+      - "PGPORT=6432"
+      - "PGDATA=/var/lib/postgresql/v18"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=123654"
+      - "POSTGRES_DB=app"
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - pgvecotr_data:/var/lib/postgresql:Z"
+      # :rw, The :Z tells Docker to automatically relabel the file permissions so the container can access them
+    user: postgres:postgres
+    network_mode: host
+    #command: tail -f /dev/null
+    cpus: '2'
+    #cpuset: '0'
+    mem_limit: 8gb
+    memswap_limit: -1
+    shm_size: 2gb
+    restart: always
