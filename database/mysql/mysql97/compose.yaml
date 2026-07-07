@@ -1,0 +1,23 @@
+# docker compose -f compose.yaml up -d
+name: mysql97
+services:
+  mysql97-dev:
+    image: mysql:9.7-oracle
+    hostname: mysql97-dev
+    container_name: mysql97-dev
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: "yourpass"
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: "yourpass"
+      MYSQL_TCP_PORT: 3309
+      TZ: Asia/Shanghai
+    volumes:
+      - ./__data__:/var/lib/mysql
+      - ./conf.d:/etc/mysql/conf.d
+    network_mode: host
+    restart: unless-stopped
+    mem_limit: 4096m
+    cpus: 2
