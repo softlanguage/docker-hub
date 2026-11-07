@@ -1,6 +1,6 @@
-# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:16.10-pgvector . 
+# docker build --network host --force-rm -f Dockerfile -t softlang/postgres-cn:16.15-pgvector .
 # postgresql-16, support Chinese, base on bookworm
-FROM postgres:16.10-bookworm
+FROM postgres:16.15-bookworm
 
 # https://github.com/docker-library/postgres/blob/master/16/bookworm/Dockerfile
 RUN localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8
